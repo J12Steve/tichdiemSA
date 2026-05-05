@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Playground Loyalty</title>
+    <title>Song Anh Kids Coffee</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -749,6 +749,39 @@
 </div>
 
 <script>
+     // Tắt chuột phải
+  document.addEventListener("contextmenu", function (e) {
+    e.preventDefault();
+  });
+
+  // Tắt phím inspect
+  document.addEventListener("keydown", function (e) {
+    // F12
+    if (e.key === "F12") {
+      e.preventDefault();
+    }
+
+    // Ctrl+Shift+I
+    if (e.ctrlKey && e.shiftKey && e.key === "I") {
+      e.preventDefault();
+    }
+
+    // Ctrl+Shift+J
+    if (e.ctrlKey && e.shiftKey && e.key === "J") {
+      e.preventDefault();
+    }
+
+    // Ctrl+U
+    if (e.ctrlKey && e.key === "u") {
+      e.preventDefault();
+    }
+
+    // Ctrl+S
+    if (e.ctrlKey && e.key === "s") {
+      e.preventDefault();
+    }
+  });
+    
     let members = JSON.parse(localStorage.getItem('playground_members')) || [];
     let isDark = false;
     let pendingDeleteId = null;
