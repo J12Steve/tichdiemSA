@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lâm Trần Hoàng Phúc — Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f2f2f7;
+            --bg2: #ffffff;
+            --glass: rgba(255,255,255,0.62);
+            --glass-border: rgba(255,255,255,0.85);
+            --glass-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+            --glass-deep: rgba(255,255,255,0.38);
+            --text: #1c1c1e;
+            --text2: #6e6e73;
+            --text3: #aeaeb2;
+            --accent: #5856d6;
+            --accent2: #af52de;
+            --accent-rgb: 88,86,214;
+            --red: #ff3b30;
+            --green: #34c759;
+            --amber: #ff9f0a;
+            --blur: blur(28px) saturate(1.8);
+            --radius: 22px;
+            --radius-lg: 32px;
+            --radius-pill: 999px;
+        }
+
+        html.dark {
+            --bg: #000000;
+            --bg2: #1c1c1e;
+            --glass: rgba(28,28,30,0.72);
+            --glass-border: rgba(255,255,255,0.10);
+            --glass-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 1.5px 4px rgba(0,0,0,0.3);
+            --glass-deep: rgba(255,255,255,0.05);
+            --text: #f2f2f7;
+            --text2: #aeaeb2;
+            --text3: #636366;
+            --accent: #7d7aff;
+            --accent2: #da8fff;
+            --accent-rgb: 125,122,255;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: "Kanit", -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100dvh;
+            transition: background 0.4s, color 0.4s;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 70% 55% at 15% 10%, rgba(88,86,214,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 85% 85%, rgba(175,82,222,0.16) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,122,255,0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        html.dark body::before {
+            background:
+                radial-gradient(ellipse 70% 55% at 20% 15%, rgba(125,122,255,0.22) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(218,143,255,0.18) 0%, transparent 60%);
+        }
+
+        /* Floating orbs */
+        .orb {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.25;
+            pointer-events: none;
+            z-index: 0;
+            animation: float-orb 8s ease-in-out infinite;
+        }
+        .orb-1 { width: 400px; height: 400px; background: var(--accent); top: -100px; right: -100px; animation-delay: 0s; }
+        .orb-2 { width: 300px; height: 300px; background: var(--accent2); bottom: 100px; left: -80px; animation-delay: -3s; }
+        @keyframes float-orb {
+            0%,100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-30px) scale(1.05); }
+        }
+
+        /* ── LAYOUT ── */
+        #app { position: relative; z-index: 1; }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* ── NAV ── */
+        nav {
+            position: sticky; top: 0; z-index: 50;
+            padding: 14px 24px;
+        }
+        .nav-inner {
+            max-width: 900px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius-pill);
+            padding: 10px 20px;
+        }
+        .nav-logo { display: flex; flex-direction: column; }
+        .nav-logo strong { font-size: 15px; font-weight: 800; letter-spacing: -0.03em; color: var(--text); }
+        .nav-logo span { font-size: 8px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); }
+        .nav-links { display: flex; gap: 4px; align-items: center; }
+        .nav-link {
+            font-size: 11px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+            color: var(--text2); text-decoration: none; padding: 7px 14px;
+            border-radius: var(--radius-pill);
+            transition: all 0.2s;
+        }
+        .nav-link:hover { color: var(--text); background: var(--glass-deep); }
+        .theme-btn {
+            width: 36px; height: 36px; border-radius: var(--radius-pill);
+            background: var(--glass-deep); border: 1px solid var(--glass-border);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--text2); transition: all 0.2s; margin-left: 4px;
+        }
+        .theme-btn:hover { transform: scale(1.08); background: var(--glass); }
+        .theme-btn svg { width: 16px; height: 16px; }
+
+        /* ── HERO ── */
+        .hero {
+            padding: 80px 0 60px;
+            display: flex; flex-direction: column; align-items: center; text-align: center;
+        }
+
+        .avatar-ring {
+            position: relative; width: 130px; height: 130px;
+            margin-bottom: 28px;
+        }
+        .avatar-ring::before {
+            content: '';
+            position: absolute; inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            animation: spin-ring 6s linear infinite;
+        }
+        @keyframes spin-ring {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .avatar-ring::after {
+            content: '';
+            position: absolute; inset: -6px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent2), transparent, var(--accent));
+            animation: spin-ring 6s linear infinite reverse;
+            opacity: 0.4;
+        }
+        .avatar-img {
+            position: relative; z-index: 1;
+            width: 130px; height: 130px; border-radius: 50%;
+            background: linear-gradient(135deg, rgba(var(--accent-rgb),0.3), rgba(175,82,222,0.3));
+            border: 3px solid var(--bg);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 48px; font-weight: 900; color: var(--accent);
+            letter-spacing: -0.05em;
+            overflow: hidden;
+        }
+        .avatar-initials { line-height: 1; }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 5px 14px 5px 8px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur);
+            border-radius: var(--radius-pill);
+            font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 18px;
+            box-shadow: var(--glass-shadow);
+        }
+        .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse-dot 2s ease-in-out infinite; }
+        @keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(0.7); } }
+
+        .hero-name {
+            font-size: clamp(36px, 8vw, 64px);
+            font-weight: 900; letter-spacing: -0.04em;
+            color: var(--text); line-height: 1;
+            margin-bottom: 10px;
+        }
+        .hero-name span { color: var(--accent); }
+
+        .hero-title {
+            font-size: 14px; font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--text3); margin-bottom: 22px;
+        }
+
+        .hero-bio {
+            max-width: 520px;
+            font-size: 15px; font-weight: 400; color: var(--text2);
+            line-height: 1.75; margin-bottom: 32px;
+        }
+
+        .hero-contacts {
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+        }
+        .contact-chip {
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 18px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur);
+            border-radius: var(--radius-pill);
+            font-size: 12px; font-weight: 700; color: var(--text2);
+            text-decoration: none;
+            box-shadow: var(--glass-shadow);
+            transition: all 0.25s;
+        }
+        .contact-chip:hover { transform: translateY(-2px); color: var(--accent); box-shadow: 0 12px 32px rgba(var(--accent-rgb),0.15); }
+        .contact-chip svg { width: 14px; height: 14px; color: var(--accent); flex-shrink: 0; }
+
+        /* ── SECTION ── */
+        section { padding: 60px 0; }
+        .section-label {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+        }
+        .section-label-text {
+            font-size: 9px; font-weight: 800; letter-spacing: 0.28em; text-transform: uppercase; color: var(--text3);
+        }
+        .section-label-line { flex: 1; height: 1px; background: var(--glass-border); }
+        .section-title {
+            font-size: 28px; font-weight: 900; letter-spacing: -0.04em;
+            color: var(--text); margin-bottom: 24px; line-height: 1.1;
+        }
+
+        /* ── GLASS CARD ── */
+        .glass-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius-lg);
+            padding: 28px;
+            position: relative; overflow: hidden;
+            transition: transform 0.25s, box-shadow 0.25s;
+        }
+        .glass-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+        }
+        .glass-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 20px 56px rgba(0,0,0,0.12);
+        }
+
+        /* ── SKILLS ── */
+        .skills-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 14px;
+        }
+        .skill-item {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur);
+            border-radius: 18px;
+            padding: 18px 20px;
+            display: flex; align-items: center; gap: 14px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .skill-item:hover { transform: translateY(-2px) scale(1.01); box-shadow: 0 8px 28px rgba(var(--accent-rgb),0.12); }
+        .skill-icon {
+            width: 42px; height: 42px; border-radius: 14px;
+            background: linear-gradient(135deg, rgba(var(--accent-rgb),0.18), rgba(175,82,222,0.12));
+            border: 1px solid rgba(var(--accent-rgb),0.2);
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            font-size: 20px;
+        }
+        .skill-info strong { display: block; font-size: 13px; font-weight: 800; color: var(--text); letter-spacing: -0.01em; }
+        .skill-info span { font-size: 10px; font-weight: 500; color: var(--text3); letter-spacing: 0.04em; }
+
+        /* ── TIMELINE ── */
+        .timeline { display: flex; flex-direction: column; gap: 0; position: relative; }
+        .timeline::before {
+            content: '';
+            position: absolute; left: 20px; top: 8px; bottom: 8px; width: 2px;
+            background: linear-gradient(180deg, var(--accent), transparent);
+            border-radius: var(--radius-pill);
+        }
+        .timeline-item {
+            display: flex; gap: 24px; padding-bottom: 36px;
+            animation: fade-up 0.5s ease both;
+        }
+        .timeline-item:last-child { padding-bottom: 0; }
+        @keyframes fade-up { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+
+        .timeline-dot {
+            width: 42px; height: 42px; border-radius: 14px; flex-shrink: 0;
+            background: var(--glass);
+            border: 1.5px solid var(--glass-border);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; position: relative; z-index: 1;
+            box-shadow: 0 4px 14px rgba(var(--accent-rgb),0.2);
+        }
+        .timeline-body { flex: 1; padding-top: 8px; }
+        .timeline-company {
+            font-size: 17px; font-weight: 800; letter-spacing: -0.02em;
+            color: var(--text); margin-bottom: 2px;
+        }
+        .timeline-role {
+            display: inline-flex; align-items: center; gap: 6px;
+            font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--accent); margin-bottom: 6px;
+        }
+        .timeline-period {
+            font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase;
+            color: var(--text3); margin-bottom: 14px;
+        }
+        .timeline-bullets { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+        .timeline-bullets li {
+            display: flex; gap: 8px; align-items: flex-start;
+            font-size: 13px; font-weight: 400; color: var(--text2); line-height: 1.6;
+        }
+        .timeline-bullets li::before {
+            content: '';
+            width: 5px; height: 5px; border-radius: 50%;
+            background: var(--accent); flex-shrink: 0; margin-top: 8px;
+        }
+
+        /* ── EDUCATION ── */
+        .edu-card {
+            display: flex; gap: 20px; align-items: center;
+        }
+        .edu-icon {
+            width: 60px; height: 60px; border-radius: 18px; flex-shrink: 0;
+            background: linear-gradient(135deg, rgba(var(--accent-rgb),0.2), rgba(175,82,222,0.15));
+            border: 1.5px solid rgba(var(--accent-rgb),0.25);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 28px;
+        }
+        .edu-info {}
+        .edu-school { font-size: 17px; font-weight: 800; color: var(--text); letter-spacing: -0.02em; margin-bottom: 4px; }
+        .edu-major { font-size: 12px; font-weight: 600; color: var(--accent); letter-spacing: 0.04em; margin-bottom: 4px; }
+        .edu-period { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text3); }
+
+        /* ── SOFT SKILLS PILLS ── */
+        .pills-wrap { display: flex; flex-wrap: wrap; gap: 10px; }
+        .pill {
+            display: flex; align-items: center; gap: 6px;
+            padding: 8px 16px;
+            background: var(--glass-deep);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-pill);
+            font-size: 12px; font-weight: 700; color: var(--text2);
+            transition: all 0.2s;
+        }
+        .pill:hover { color: var(--accent); border-color: rgba(var(--accent-rgb),0.3); transform: translateY(-1px); }
+        .pill-icon { font-size: 14px; }
+
+        /* ── FOOTER ── */
+        footer {
+            border-top: 1px solid var(--glass-border);
+            padding: 30px 24px;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            flex-wrap: wrap; text-align: center;
+        }
+        .footer-text { font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text3); }
+        .footer-name { font-size: 13px; font-weight: 800; color: var(--accent); letter-spacing: -0.01em; }
+        .footer-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse-dot 2s ease-in-out infinite; }
+
+        /* ── SCROLL REVEAL ── */
+        .reveal {
+            opacity: 0; transform: translateY(24px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+        .reveal-delay-1 { transition-delay: 0.1s; }
+        .reveal-delay-2 { transition-delay: 0.2s; }
+        .reveal-delay-3 { transition-delay: 0.3s; }
+
+        /* ── MOBILE ── */
+        @media (max-width: 600px) {
+            nav { padding: 10px 14px; }
+            .nav-link { display: none; }
+            .hero { padding: 50px 0 40px; }
+            .hero-name { font-size: 36px; }
+            .skills-grid { grid-template-columns: 1fr 1fr; }
+            .edu-card { flex-direction: column; align-items: flex-start; }
+            .container { padding: 0 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+
+<div id="app">
+
+    <!-- NAV -->
+    <nav>
+        <div class="nav-inner">
+            <div class="nav-logo">
+                <strong>LTH Phúc</strong>
+                <span>Portfolio · 2026</span>
+            </div>
+            <div class="nav-links">
+                <a class="nav-link" href="#about">Về tôi</a>
+                <a class="nav-link" href="#skills">Kỹ năng</a>
+                <a class="nav-link" href="#experience">Kinh nghiệm</a>
+                <a class="nav-link" href="#education">Học vấn</a>
+                <button class="theme-btn" onclick="toggleTheme()" id="themeBtn">
+                    <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="container">
+        <div class="hero" id="about">
+            <div class="avatar-ring">
+                <div class="avatar-img">
+                    <span class="avatar-initials">LP</span>
+                </div>
+            </div>
+
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Sẵn sàng cơ hội mới
+            </div>
+
+            <h1 class="hero-name">Lâm Trần <span>Hoàng Phúc</span></h1>
+            <p class="hero-title">Kỹ sư tin học · Tin học ứng dụng</p>
+
+            <p class="hero-bio">
+                Tôi là Lâm Trần Hoàng Phúc — người yêu thích công nghệ và luôn tò mò về cách các tiện ích kỹ thuật số có thể giúp cuộc sống trở nên tiện lợi hơn. Với tôi, công nghệ không chỉ là công cụ mà còn là niềm đam mê và nguồn cảm hứng để học hỏi, sáng tạo mỗi ngày.
+            </p>
+
+            <div class="hero-contacts">
+                <a class="contact-chip" href="tel:0793992017">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.87-.87a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    0793 992 017
+                </a>
+                <a class="contact-chip" href="mailto:hoangphuc12092004@gmail.com">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+                    hoangphuc12092004@gmail.com
+                </a>
+                <a class="contact-chip" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Tân An, Cần Thơ
+                </a>
+                <a class="contact-chip" href="#">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    Zalo
+                </a>
+            </div>
+        </div>
+
+        <!-- SKILLS -->
+        <section id="skills">
+            <div class="section-label reveal">
+                <span class="section-label-text">Năng lực</span>
+                <div class="section-label-line"></div>
+            </div>
+            <h2 class="section-title reveal">Kỹ năng chuyên môn</h2>
+            <div class="skills-grid">
+                <div class="skill-item reveal reveal-delay-1">
+                    <div class="skill-icon">💻</div>
+                    <div class="skill-info">
+                        <strong>Tin học văn phòng</strong>
+                        <span>Word · Excel · PowerPoint</span>
+                    </div>
+                </div>
+                <div class="skill-item reveal reveal-delay-2">
+                    <div class="skill-icon">⚙️</div>
+                    <div class="skill-info">
+                        <strong>Công nghệ phần mềm</strong>
+                        <span>Quy trình phát triển phần mềm</span>
+                    </div>
+                </div>
+                <div class="skill-item reveal reveal-delay-3">
+                    <div class="skill-icon">🧑‍💻</div>
+                    <div class="skill-info">
+                        <strong>Lập trình cơ bản</strong>
+                        <span>Logic · Thuật toán · Code</span>
+                    </div>
+                </div>
+                <div class="skill-item reveal reveal-delay-1">
+                    <div class="skill-icon">🗄️</div>
+                    <div class="skill-info">
+                        <strong>Quản lý dữ liệu</strong>
+                        <span>Database · Xử lý thông tin</span>
+                    </div>
+                </div>
+                <div class="skill-item reveal reveal-delay-2">
+                    <div class="skill-icon">🎨</div>
+                    <div class="skill-info">
+                        <strong>Thiết kế & Trình bày</strong>
+                        <span>Photoshop · Layout · Visual</span>
+                    </div>
+                </div>
+                <div class="skill-item reveal reveal-delay-3">
+                    <div class="skill-icon">🤖</div>
+                    <div class="skill-info">
+                        <strong>AI Tools</strong>
+                        <span>ChatGPT · Gemini · Grok · Claude</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Soft skills -->
+            <div class="glass-card reveal" style="margin-top:24px;">
+                <p style="font-size:11px;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--text3);margin-bottom:16px;">Kỹ năng mềm</p>
+                <div class="pills-wrap">
+                    <div class="pill"><span class="pill-icon">🎯</span> Cẩn thận &amp; trách nhiệm</div>
+                    <div class="pill"><span class="pill-icon">⏱️</span> Quản lý thời gian</div>
+                    <div class="pill"><span class="pill-icon">🚀</span> Chủ động &amp; chịu áp lực</div>
+                    <div class="pill"><span class="pill-icon">🤝</span> Phối hợp đồng đội</div>
+                    <div class="pill"><span class="pill-icon">🔄</span> Thích nghi nhanh</div>
+                    <div class="pill"><span class="pill-icon">💡</span> Tư duy công nghệ</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section id="experience">
+            <div class="section-label reveal">
+                <span class="section-label-text">Thực tiễn</span>
+                <div class="section-label-line"></div>
+            </div>
+            <h2 class="section-title reveal">Kinh nghiệm làm việc</h2>
+
+            <div class="timeline">
+
+                <!-- HiFriendz -->
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot">✍️</div>
+                    <div class="timeline-body">
+                        <div class="timeline-company">HiFriendz</div>
+                        <div class="timeline-role">Cộng tác viên Content</div>
+                        <div class="timeline-period">05/2025 – 10/2025</div>
+                        <ul class="timeline-bullets">
+                            <li>Xây dựng và sáng tạo nội dung cho các chiến dịch truyền thông mạng xã hội.</li>
+                            <li>Viết bài đăng fanpage, caption sản phẩm và bài PR theo hướng trẻ trung, bắt trend.</li>
+                            <li>Hỗ trợ quản lý fanpage, trả lời bình luận và tin nhắn khách hàng.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Vinaphone -->
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot">📡</div>
+                    <div class="timeline-body">
+                        <div class="timeline-company">Vinaphone</div>
+                        <div class="timeline-role">Nhân viên kỹ thuật WiFi · Thực tập sinh</div>
+                        <div class="timeline-period">11/2024 – 01/2025</div>
+                        <ul class="timeline-bullets">
+                            <li>Lắp đặt, bảo trì và xử lý sự cố mạng WiFi cho khách hàng cá nhân và doanh nghiệp.</li>
+                            <li>Giải quyết nhanh các vấn đề kỹ thuật, giảm đáng kể thời gian khắc phục lỗi.</li>
+                            <li>Tư vấn, hướng dẫn khách hàng sử dụng thiết bị mạng đúng cách, nâng cao trải nghiệm.</li>
+                            <li>Phối hợp đội ngũ kỹ thuật để tối ưu hiệu suất dịch vụ, củng cố uy tín thương hiệu.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Long Sport -->
+                <div class="timeline-item reveal">
+                    <div class="timeline-dot">📦</div>
+                    <div class="timeline-body">
+                        <div class="timeline-company">NPP Long Sport</div>
+                        <div class="timeline-role">Nhân viên kho</div>
+                        <div class="timeline-period">04/2024 – 06/2025</div>
+                        <ul class="timeline-bullets">
+                            <li>Chuẩn bị và đóng gói đơn hàng, đảm bảo đúng mẫu mã và số lượng.</li>
+                            <li>Tiếp nhận hàng hóa, kiểm tra tình trạng sản phẩm và sắp xếp vào khu vực quy định.</li>
+                            <li>Thực hiện kiểm kê định kỳ, ghi nhận và báo cáo kịp thời chênh lệch số lượng.</li>
+                            <li>Phối hợp với bộ phận giao hàng để đảm bảo đơn chuyển đúng thời gian và địa điểm.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- EDUCATION -->
+        <section id="education" style="padding-bottom:80px;">
+            <div class="section-label reveal">
+                <span class="section-label-text">Học vấn</span>
+                <div class="section-label-line"></div>
+            </div>
+            <h2 class="section-title reveal">Quá trình học tập</h2>
+            <div class="glass-card reveal">
+                <div class="edu-card">
+                    <div class="edu-icon">🎓</div>
+                    <div class="edu-info">
+                        <div class="edu-school">Trường Cao đẳng Cần Thơ</div>
+                        <div class="edu-major">Kỹ sư Tin học · Chuyên ngành Tin học ứng dụng</div>
+                        <div class="edu-period">Tháng 9/2022 – 11/2025</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div><!-- /container -->
+
+    <!-- FOOTER -->
+    <footer>
+        <span class="footer-text">Crafted by</span>
+        <span class="footer-name">Lâm Trần Hoàng Phúc</span>
+        <div class="footer-dot"></div>
+        <span class="footer-text" style="margin-left:4px;"> 2026</span>
+    </footer>
+
+</div>
+
+<script>
+    // ── THEME ──
+    let isDark = false;
+    function toggleTheme() {
+        isDark = !isDark;
+        document.documentElement.classList.toggle('dark', isDark);
+        const icon = document.getElementById('themeIcon');
+        icon.innerHTML = isDark
+            ? `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`
+            : `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+    }
+
+    // ── SCROLL REVEAL ──
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
