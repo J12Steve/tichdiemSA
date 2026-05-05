@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playground Loyalty</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f2f2f7;
+            --bg2: #ffffff;
+            --glass: rgba(255,255,255,0.62);
+            --glass-border: rgba(255,255,255,0.85);
+            --glass-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+            --glass-deep: rgba(255,255,255,0.38);
+            --text: #1c1c1e;
+            --text2: #6e6e73;
+            --text3: #aeaeb2;
+            --accent: #5856d6;
+            --accent2: #af52de;
+            --accent-rgb: 88,86,214;
+            --red: #ff3b30;
+            --green: #34c759;
+            --amber: #ff9f0a;
+            --blur: blur(28px) saturate(1.8);
+            --blur-modal: blur(48px) saturate(2.0);
+            --radius: 22px;
+            --radius-lg: 32px;
+            --radius-pill: 999px;
+        }
+
+        html.dark {
+            --bg: #000000;
+            --bg2: #1c1c1e;
+            --glass: rgba(28,28,30,0.72);
+            --glass-border: rgba(255,255,255,0.10);
+            --glass-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 1.5px 4px rgba(0,0,0,0.3);
+            --glass-deep: rgba(255,255,255,0.05);
+            --text: #f2f2f7;
+            --text2: #aeaeb2;
+            --text3: #636366;
+            --accent: #7d7aff;
+            --accent2: #da8fff;
+            --accent-rgb: 125,122,255;
+        }
+
+        body {
+            font-family: "Kanit", -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            height: 100dvh;
+            overflow: hidden;
+            transition: background 0.4s, color 0.4s;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background:
+                radial-gradient(ellipse 70% 55% at 15% 10%, rgba(88,86,214,0.18) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 85% 85%, rgba(175,82,222,0.16) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,122,255,0.06) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        html.dark body::before {
+            background:
+                radial-gradient(ellipse 70% 55% at 20% 15%, rgba(125,122,255,0.22) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(218,143,255,0.18) 0%, transparent 60%);
+        }
+
+        #app {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100dvh;
+        }
+
+        .glass {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            box-shadow: var(--glass-shadow);
+        }
+
+        /* ── HEADER ───────────────────────── */
+        header {
+            flex-shrink: 0;
+            padding: 20px 20px 0;
+            max-width: 960px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .wordmark { display: flex; flex-direction: column; }
+        .wordmark h1 {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -0.04em;
+            color: var(--text);
+            line-height: 1;
+        }
+        .wordmark span {
+            font-size: 9px;
+            font-weight: 600;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-top: 2px;
+        }
+
+        .header-actions { display: flex; align-items: center; gap: 8px; }
+
+        .search-wrap { position: relative; }
+        .search-wrap svg {
+            position: absolute; left: 12px; top: 50%;
+            transform: translateY(-50%);
+            width: 15px; height: 15px;
+            color: var(--text3); pointer-events: none;
+        }
+        input[type="text"] {
+            font-family: inherit;
+            padding: 9px 14px 9px 34px;
+            border-radius: var(--radius-pill);
+            background: var(--glass-deep);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            font-size: 13px; font-weight: 500;
+            color: var(--text);
+            width: 170px; outline: none;
+            transition: all 0.25s;
+        }
+        input[type="text"]::placeholder { color: var(--text3); }
+        input[type="text"]:focus {
+            border-color: rgba(var(--accent-rgb),0.5);
+            box-shadow: 0 0 0 3px rgba(var(--accent-rgb),0.1);
+            width: 200px;
+        }
+
+        .icon-btn {
+            width: 38px; height: 38px;
+            border-radius: var(--radius-pill);
+            background: var(--glass-deep);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--text2);
+            transition: all 0.2s; flex-shrink: 0;
+        }
+        .icon-btn:hover { transform: scale(1.06); background: var(--glass); }
+        .icon-btn:active { transform: scale(0.94); }
+        .icon-btn svg { width: 17px; height: 17px; }
+
+        .add-btn {
+            height: 38px; padding: 0 16px;
+            border-radius: var(--radius-pill);
+            background: var(--accent); border: none;
+            color: #fff; font-family: inherit;
+            font-size: 13px; font-weight: 700;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
+            transition: all 0.2s;
+            box-shadow: 0 4px 16px rgba(var(--accent-rgb),0.35);
+            flex-shrink: 0;
+        }
+        .add-btn:hover { transform: scale(1.04); box-shadow: 0 6px 20px rgba(var(--accent-rgb),0.45); }
+        .add-btn:active { transform: scale(0.96); }
+        .add-btn svg { width: 15px; height: 15px; }
+
+        /* ── SEGMENTED ────────────────────── */
+        .seg-wrap { display: flex; justify-content: center; margin-top: 16px; }
+        .seg {
+            position: relative; display: flex;
+            background: var(--glass-deep);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            border-radius: var(--radius-pill);
+            padding: 3px; gap: 2px;
+            width: 180px; height: 36px;
+        }
+        .seg-slider {
+            position: absolute; top: 3px; bottom: 3px;
+            width: calc(50% - 4px); left: 3px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-pill);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+            transition: transform 0.3s cubic-bezier(0.4,0,0.2,1);
+        }
+        .seg button {
+            position: relative; z-index: 1; flex: 1;
+            background: none; border: none;
+            font-family: inherit;
+            font-size: 11px; font-weight: 700;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            cursor: pointer; border-radius: var(--radius-pill);
+            transition: color 0.25s;
+        }
+        .seg button.active { color: var(--text); }
+        .seg button:not(.active) { color: var(--text3); }
+
+        /* ── MAIN ─────────────────────────── */
+        main {
+            flex: 1; overflow: hidden;
+            padding: 12px 20px 0;
+            max-width: 960px; width: 100%;
+            margin: 0 auto;
+        }
+
+        #viewCards { height: 100%; overflow-y: auto; padding-bottom: 80px; }
+        #viewCards::-webkit-scrollbar { width: 0; }
+
+        #cardsGrid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 14px;
+        }
+
+        /* ── MEMBER CARD ──────────────────── */
+        .member-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            position: relative;
+            transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
+            overflow: hidden;
+        }
+        .member-card::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
+        }
+        .member-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 48px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .birthday-card {
+            background: linear-gradient(145deg, rgba(255,210,0,0.18), rgba(255,159,10,0.10)) !important;
+            border-color: rgba(255,159,10,0.45) !important;
+            animation: bday-pulse 2s ease-in-out infinite;
+        }
+        @keyframes bday-pulse {
+            0%,100% { box-shadow: 0 0 0 0 rgba(255,159,10,0.3), var(--glass-shadow); }
+            50% { box-shadow: 0 0 0 8px rgba(255,159,10,0), var(--glass-shadow); }
+        }
+
+        .card-top {
+            display: flex; justify-content: space-between;
+            align-items: flex-start; margin-bottom: 14px;
+        }
+        .card-name { font-size: 18px; font-weight: 800; letter-spacing: -0.03em; color: var(--text); line-height: 1.1; }
+        .card-sub { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-top: 3px; }
+        .card-sub.bday-sub { color: var(--amber); }
+
+        .card-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s; }
+        .member-card:hover .card-actions { opacity: 1; }
+
+        .card-act-btn {
+            width: 30px; height: 30px; border-radius: 10px;
+            background: var(--glass-deep); border: 1px solid var(--glass-border);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--text3); transition: all 0.18s;
+        }
+        .card-act-btn:hover { color: var(--text); background: var(--glass); }
+        .card-act-btn.del:hover { color: var(--red); }
+        .card-act-btn.edit:hover { color: var(--accent); }
+        .card-act-btn.dl:hover { color: #007aff; }
+        .card-act-btn svg { width: 13px; height: 13px; }
+
+        .card-parents {
+            font-size: 10px; font-weight: 600; color: var(--text3);
+            letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 14px;
+        }
+
+        /* ── DOTS GRID ────────────────────── */
+        .dots-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            background: var(--glass-deep);
+            border-radius: 18px;
+            padding: 14px;
+            margin-bottom: 14px;
+            border: 1px solid var(--glass-border);
+        }
+        .dot {
+            aspect-ratio: 1;
+            border-radius: 50%;
+            border: 1.5px solid var(--text3);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+            overflow: hidden;
+            background: transparent;
+            position: relative;
+        }
+        .dot:hover { transform: scale(1.12); border-color: var(--accent); }
+        .dot:active { transform: scale(0.9); }
+        .dot.filled {
+            background: var(--accent);
+            border-color: var(--accent);
+            box-shadow: 0 2px 8px rgba(var(--accent-rgb),0.4);
+        }
+        .dot.filled.bday-dot {
+            background: var(--amber);
+            border-color: var(--amber);
+            box-shadow: 0 2px 8px rgba(255,159,10,0.4);
+        }
+
+        /* ── FIX: Logo vừa vẹn trong ô tròn ── */
+        .dot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            border-radius: 50%;
+            display: block;
+            pointer-events: none;
+        }
+
+        .card-footer {
+            display: flex; align-items: center; justify-content: space-between;
+            border-top: 1px solid var(--glass-border); padding-top: 12px;
+        }
+        .card-phone {
+            display: flex; align-items: center; gap: 6px;
+            font-size: 12px; font-weight: 700; color: var(--text2); letter-spacing: 0.04em;
+        }
+        .card-phone svg { width: 12px; height: 12px; color: var(--accent); }
+        .card-id { font-size: 9px; font-weight: 600; color: var(--text3); letter-spacing: 0.12em; text-transform: uppercase; }
+
+        /* ── TABLE VIEW ───────────────────── */
+        #viewTable { height: 100%; display: none; flex-direction: column; padding-bottom: 80px; }
+        #viewTable.active { display: flex; }
+        .table-glass {
+            background: var(--glass); border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius-lg);
+            overflow: hidden; flex: 1; overflow-y: auto;
+        }
+        .table-glass::-webkit-scrollbar { width: 0; }
+        table { width: 100%; border-collapse: collapse; }
+        thead th {
+            padding: 14px 18px;
+            font-size: 9px; font-weight: 800; letter-spacing: 0.18em; text-transform: uppercase;
+            color: var(--text3); background: var(--glass-deep);
+            position: sticky; top: 0;
+            border-bottom: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+        }
+        tbody tr { border-bottom: 1px solid var(--glass-border); transition: background 0.15s; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody tr:hover { background: var(--glass-deep); }
+        tbody td { padding: 14px 18px; }
+        .td-name { font-size: 13px; font-weight: 800; color: var(--text); }
+        .td-age { font-size: 10px; font-weight: 500; color: var(--text3); margin-top: 2px; }
+        .td-parents { font-size: 10px; font-weight: 500; color: var(--text2); line-height: 1.6; }
+        .td-phone { font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: 0.06em; }
+        .progress-bar { display: flex; align-items: center; gap: 8px; }
+        .progress-track { width: 64px; height: 4px; background: var(--glass-border); border-radius: var(--radius-pill); overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--accent); border-radius: var(--radius-pill); transition: width 0.4s cubic-bezier(0.4,0,0.2,1); }
+        .progress-fill.bday { background: var(--amber); }
+        .progress-label { font-size: 10px; font-weight: 800; color: var(--text2); }
+        .tbl-act-btn {
+            width: 32px; height: 32px; border-radius: 10px;
+            background: none; border: none;
+            display: inline-flex; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--text3); transition: all 0.18s;
+        }
+        .tbl-act-btn:hover { background: var(--glass-deep); color: var(--text); transform: scale(1.1); }
+        .tbl-act-btn.plus:hover { color: var(--accent); }
+        .tbl-act-btn.del:hover { color: var(--red); }
+        .tbl-act-btn svg { width: 15px; height: 15px; }
+        .td-actions { display: flex; justify-content: flex-end; gap: 2px; }
+
+        /* ── FOOTER ───────────────────────── */
+        footer {
+            flex-shrink: 0; display: flex;
+            align-items: center; justify-content: center;
+            padding: 10px 20px; gap: 6px;
+        }
+        .footer-text { font-size: 9px; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text3); }
+        .footer-name { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: -0.01em; }
+        .footer-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse-dot 2s ease-in-out infinite; }
+        @keyframes pulse-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
+
+        /* ── MODALS ───────────────────────── */
+        .modal-overlay {
+            position: fixed; inset: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(20px) saturate(1.4);
+            -webkit-backdrop-filter: blur(20px) saturate(1.4);
+            opacity: 0; pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.visible { opacity: 1; pointer-events: all; }
+
+        .modal-card {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur-modal);
+            -webkit-backdrop-filter: var(--blur-modal);
+            box-shadow: 0 24px 80px rgba(0,0,0,0.25), 0 1px 0 rgba(255,255,255,0.15) inset;
+            border-radius: var(--radius-lg);
+            width: 100%; max-width: 490px; padding: 32px;
+            transform: translateY(20px) scale(0.95);
+            transition: transform 0.35s cubic-bezier(0.34,1.2,0.64,1);
+            position: relative; overflow: hidden;
+        }
+        .modal-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
+        }
+        .modal-overlay.visible .modal-card { transform: translateY(0) scale(1); }
+
+        .modal-title {
+            font-size: 22px; font-weight: 800; letter-spacing: -0.03em;
+            color: var(--text); margin-bottom: 24px;
+        }
+
+        /* ── FORM FIELDS ──────────────────── */
+        .form-group { margin-bottom: 16px; }
+        .form-label {
+            font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase; color: var(--text2); margin-bottom: 8px; display: block;
+        }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .form-stack { display: flex; flex-direction: column; gap: 0; }
+
+        /* Input wrapper cho inline error */
+        .input-wrap { position: relative; }
+        .form-input {
+            width: 100%; padding: 15px 18px;
+            border-radius: 16px;
+            background: var(--glass-deep);
+            border: 1.5px solid var(--glass-border);
+            font-family: inherit; font-size: 15px; font-weight: 500;
+            color: var(--text); outline: none; transition: all 0.25s;
+        }
+        .form-input::placeholder { color: var(--text3); }
+        .form-input:focus {
+            border-color: rgba(var(--accent-rgb),0.6);
+            box-shadow: 0 0 0 4px rgba(var(--accent-rgb),0.12);
+            background: var(--glass); transform: translateY(-1px);
+        }
+
+        /* ── INLINE ERROR ─────────────────── */
+        .form-input.has-error {
+            border-color: rgba(255,59,48,0.7) !important;
+            box-shadow: 0 0 0 3px rgba(255,59,48,0.12) !important;
+            background: rgba(255,59,48,0.04) !important;
+            animation: shake 0.35s cubic-bezier(0.36,0.07,0.19,0.97);
+        }
+        @keyframes shake {
+            0%,100% { transform: translateX(0); }
+            20% { transform: translateX(-6px); }
+            40% { transform: translateX(6px); }
+            60% { transform: translateX(-4px); }
+            80% { transform: translateX(4px); }
+        }
+        .field-error {
+            display: flex; align-items: center; gap: 5px;
+            font-size: 11px; font-weight: 600;
+            color: var(--red);
+            margin-top: 6px;
+            padding: 0 4px;
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0;
+            transition: max-height 0.3s ease, opacity 0.25s ease, margin-top 0.25s ease;
+        }
+        .field-error.visible {
+            max-height: 40px;
+            opacity: 1;
+            margin-top: 6px;
+        }
+        .field-error svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+        .form-actions {
+            display: flex; gap: 12px; margin-top: 24px; padding-top: 20px;
+            border-top: 1px solid var(--glass-border);
+        }
+        .btn-cancel {
+            flex: 1; padding: 14px; border-radius: 16px;
+            background: var(--glass-deep); border: 1.5px solid var(--glass-border);
+            font-family: inherit; font-size: 14px; font-weight: 700;
+            color: var(--text2); cursor: pointer; transition: all 0.2s;
+        }
+        .btn-cancel:hover { color: var(--text); background: var(--glass); transform: translateY(-1px); }
+        .btn-cancel:active { transform: translateY(0); }
+        .btn-confirm {
+            flex: 2; padding: 14px; border-radius: 16px;
+            background: var(--accent); border: none;
+            font-family: inherit; font-size: 14px; font-weight: 800;
+            color: #fff; cursor: pointer;
+            box-shadow: 0 4px 16px rgba(var(--accent-rgb),0.4);
+            transition: all 0.2s;
+        }
+        .btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(var(--accent-rgb),0.5); }
+        .btn-confirm:active { transform: translateY(0); }
+
+        /* Alert/Notif Modals */
+        .modal-icon-box {
+            width: 56px; height: 56px; border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 16px;
+        }
+        .modal-icon-box.red { background: rgba(255,59,48,0.14); }
+        .modal-icon-box.green { background: rgba(52,199,89,0.14); }
+        .modal-icon-box.amber { background: rgba(255,159,10,0.14); }
+        .modal-icon-box.red svg { color: var(--red); }
+        .modal-icon-box.green svg { color: var(--green); }
+        .modal-icon-box.amber svg { color: var(--amber); }
+        .modal-icon-box svg { width: 26px; height: 26px; }
+
+        .modal-alert-title { text-align: center; font-size: 17px; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 8px; }
+        .modal-alert-desc { text-align: center; font-size: 12px; font-weight: 500; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
+
+        .btn-red {
+            flex: 1.5; padding: 13px; border-radius: 14px;
+            background: var(--red); border: none;
+            font-family: inherit; font-size: 13px; font-weight: 800;
+            color: #fff; cursor: pointer;
+            box-shadow: 0 4px 14px rgba(255,59,48,0.3);
+            transition: all 0.2s;
+        }
+        .btn-red:hover { transform: scale(1.02); }
+        .btn-red:active { transform: scale(0.97); }
+
+        .btn-green {
+            width: 100%; padding: 13px; border-radius: 14px;
+            background: var(--green); border: none;
+            font-family: inherit; font-size: 13px; font-weight: 800;
+            color: #fff; cursor: pointer;
+            box-shadow: 0 4px 14px rgba(52,199,89,0.3);
+            transition: all 0.2s;
+        }
+        .btn-green:active { transform: scale(0.97); }
+
+        .btn-red-outline {
+            width: 100%; padding: 13px; border-radius: 14px;
+            background: rgba(255,59,48,0.12); border: none;
+            font-family: inherit; font-size: 13px; font-weight: 800;
+            color: var(--red); cursor: pointer; transition: all 0.2s;
+        }
+
+        /* ── MOBILE ───────────────────────── */
+        @media (max-width: 480px) {
+            header { padding: 14px 14px 0; }
+            main { padding: 10px 14px 0; }
+            .wordmark h1 { font-size: 20px; }
+            .add-btn span { display: none; }
+            input[type="text"] { width: 130px; font-size: 12px; }
+            input[type="text"]:focus { width: 150px; }
+            #cardsGrid { grid-template-columns: 1fr; }
+            .modal-card { padding: 24px 20px; border-radius: 24px; }
+            .modal-title { font-size: 19px; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+            .dots-grid { gap: 6px; padding: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+<div id="app">
+
+    <!-- HEADER -->
+    <header>
+        <div class="header-top">
+            <div class="wordmark">
+                <h1>PLAYGROUND</h1>
+                <span>Premium Loyalty</span>
+            </div>
+            <div class="header-actions">
+                <div class="search-wrap">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                    <input type="text" id="searchInput" placeholder="Tên, số điện thoại…">
+                </div>
+                <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Chế độ tối/sáng">
+                    <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+                </button>
+                <button class="add-btn" onclick="openModal()">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+                    <span>Thêm</span>
+                </button>
+            </div>
+        </div>
+        <div class="seg-wrap">
+            <div class="seg">
+                <div class="seg-slider" id="segSlider"></div>
+                <button id="btnCards" class="active" onclick="switchView('cards')">Cards</button>
+                <button id="btnList" onclick="switchView('table')">List</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN -->
+    <main>
+        <div id="viewCards">
+            <div id="cardsGrid"></div>
+        </div>
+        <div id="viewTable">
+            <div class="table-glass">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Thành viên</th>
+                            <th>Cha / Mẹ</th>
+                            <th>Liên hệ</th>
+                            <th>Điểm</th>
+                            <th style="text-align:right">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody id="memberTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER -->
+    <footer>
+        <span class="footer-text">Crafted by</span>
+        <span class="footer-name">Hphuclam</span>
+        <div class="footer-dot"></div>
+    </footer>
+
+    <!-- ADD/EDIT MODAL -->
+    <div class="modal-overlay" id="formModal">
+        <div class="modal-card">
+            <h2 class="modal-title" id="formModalTitle">Thêm Thành Viên</h2>
+            <form id="memberForm" novalidate>
+                <input type="hidden" id="editId">
+                <div class="form-stack">
+
+                    <div class="form-group">
+                        <label class="form-label" for="kidName">Họ tên bé</label>
+                        <div class="input-wrap">
+                            <input class="form-input" type="text" id="kidName" placeholder="Nhập họ tên đầy đủ" autocomplete="off">
+                            <div class="field-error" id="err-kidName">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                <span id="err-kidName-msg"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Phụ huynh</label>
+                        <div class="form-row">
+                            <div class="input-wrap">
+                                <input class="form-input" type="text" id="dadName" placeholder="Tên Cha" autocomplete="off">
+                                <div class="field-error" id="err-parents">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                    <span id="err-parents-msg"></span>
+                                </div>
+                            </div>
+                            <div class="input-wrap">
+                                <input class="form-input" type="text" id="momName" placeholder="Tên Mẹ" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="phone">Số điện thoại</label>
+                        <div class="input-wrap">
+                            <input class="form-input" type="text" id="phone" placeholder="0912 345 678" inputmode="numeric" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,''); clearFieldError('phone')">
+                            <div class="field-error" id="err-phone">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                <span id="err-phone-msg"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group" style="margin-bottom:0;">
+                        <label class="form-label" for="dob">Ngày sinh</label>
+                        <div class="input-wrap">
+                            <input class="form-input" type="date" id="dob">
+                            <div class="field-error" id="err-dob">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                                <span id="err-dob-msg"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeModal('formModal')">Hủy</button>
+                    <button type="submit" class="btn-confirm">Xác nhận</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- DELETE MODAL -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-card" style="text-align:center;">
+            <div class="modal-icon-box red" style="margin-bottom:16px;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="modal-alert-title">Xác nhận xóa?</div>
+            <p class="modal-alert-desc">Dữ liệu của bé sẽ bị xóa vĩnh viễn và không thể khôi phục.</p>
+            <div class="form-actions">
+                <button class="btn-cancel" onclick="closeModal('deleteModal')">Hủy</button>
+                <button class="btn-red" onclick="confirmDelete()">Xóa ngay</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- NOTIF MODAL -->
+    <div class="modal-overlay" id="notifModal">
+        <div class="modal-card" style="text-align:center;">
+            <div class="modal-icon-box green" id="notifIconBox">
+                <svg id="notifIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+            </div>
+            <div class="modal-alert-title" id="notifTitle">Thông báo</div>
+            <p class="modal-alert-desc" id="notifDesc">Nội dung</p>
+            <button class="btn-green" id="notifBtn" onclick="closeModal('notifModal')">Tuyệt vời</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    let members = JSON.parse(localStorage.getItem('playground_members')) || [];
+    let isDark = false;
+    let pendingDeleteId = null;
+    const today = new Date();
+
+    // ── THEME ──────────────────────────────────────
+    function toggleTheme() {
+        isDark = !isDark;
+        document.documentElement.classList.toggle('dark', isDark);
+        const icon = document.getElementById('themeIcon');
+        if (isDark) {
+            icon.innerHTML = `<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>`;
+        } else {
+            icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+        }
+    }
+
+    // ── VIEW SWITCH ────────────────────────────────
+    function switchView(v) {
+        const slider = document.getElementById('segSlider');
+        const btnC = document.getElementById('btnCards');
+        const btnL = document.getElementById('btnList');
+        const vC = document.getElementById('viewCards');
+        const vT = document.getElementById('viewTable');
+        if (v === 'cards') {
+            slider.style.transform = 'translateX(0)';
+            btnC.classList.add('active'); btnL.classList.remove('active');
+            vC.style.display = ''; vT.classList.remove('active');
+        } else {
+            slider.style.transform = 'translateX(100%)';
+            btnL.classList.add('active'); btnC.classList.remove('active');
+            vC.style.display = 'none'; vT.classList.add('active');
+        }
+    }
+
+    // ── MODALS ─────────────────────────────────────
+    function openModal(id = null) {
+        const title = document.getElementById('formModalTitle');
+        const form = document.getElementById('memberForm');
+        clearAllErrors();
+        if (id) {
+            const d = members.find(x => x.id == id);
+            title.textContent = 'Sửa Thông Tin';
+            document.getElementById('editId').value = d.id;
+            document.getElementById('kidName').value = d.kidName;
+            document.getElementById('dadName').value = d.dadName || '';
+            document.getElementById('momName').value = d.momName || '';
+            document.getElementById('phone').value = d.phone;
+            document.getElementById('dob').value = d.dob || '';
+        } else {
+            title.textContent = 'Thêm Thành Viên';
+            form.reset();
+            document.getElementById('editId').value = '';
+        }
+        showModal('formModal');
+    }
+
+    function showModal(id) { document.getElementById(id).classList.add('visible'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('visible'); }
+
+    // ── INLINE ERROR HELPERS ───────────────────────
+    function showFieldError(fieldId, message) {
+        const input = document.getElementById(fieldId);
+        const errDiv = document.getElementById('err-' + fieldId);
+        const errMsg = document.getElementById('err-' + fieldId + '-msg');
+        if (input) input.classList.add('has-error');
+        if (errDiv && errMsg) {
+            errMsg.textContent = message;
+            errDiv.classList.add('visible');
+        }
+        // focus trên field lỗi đầu tiên
+        if (input) input.focus();
+    }
+
+    function clearFieldError(fieldId) {
+        const input = document.getElementById(fieldId);
+        const errDiv = document.getElementById('err-' + fieldId);
+        if (input) input.classList.remove('has-error');
+        if (errDiv) errDiv.classList.remove('visible');
+    }
+
+    function clearAllErrors() {
+        ['kidName','phone','dob','parents'].forEach(id => {
+            const errDiv = document.getElementById('err-' + id);
+            if (errDiv) errDiv.classList.remove('visible');
+        });
+        ['kidName','phone','dob','dadName','momName'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.remove('has-error');
+        });
+    }
+
+    // Clear lỗi khi user bắt đầu nhập
+    ['kidName','dadName','momName','dob'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', () => clearFieldError(id));
+    });
+
+    // ── VALIDATE & SUBMIT ──────────────────────────
+    document.getElementById('memberForm').onsubmit = (e) => {
+        e.preventDefault();
+        clearAllErrors();
+
+        const editId   = document.getElementById('editId').value;
+        const kidName  = document.getElementById('kidName').value.trim();
+        const dadName  = document.getElementById('dadName').value.trim();
+        const momName  = document.getElementById('momName').value.trim();
+        const phone    = document.getElementById('phone').value.trim();
+        const dobVal   = document.getElementById('dob').value;
+
+        let hasError = false;
+
+        // 1. Họ tên bé – bắt buộc, ít nhất 2 ký tự
+        if (!kidName) {
+            showFieldError('kidName', 'Vui lòng nhập họ tên của bé');
+            hasError = true;
+        } else if (kidName.length < 2) {
+            showFieldError('kidName', 'Họ tên quá ngắn, ít nhất 2 ký tự');
+            hasError = true;
+        }
+
+        // 2. Phụ huynh – ít nhất phải có 1 trong 2
+        if (!dadName && !momName) {
+            const errDiv = document.getElementById('err-parents');
+            const errMsg = document.getElementById('err-parents-msg');
+            document.getElementById('dadName').classList.add('has-error');
+            document.getElementById('momName').classList.add('has-error');
+            if (errMsg) errMsg.textContent = 'Cần nhập ít nhất tên Cha hoặc Mẹ';
+            if (errDiv) errDiv.classList.add('visible');
+            if (!hasError) document.getElementById('dadName').focus();
+            hasError = true;
+        }
+
+        // 3. Số điện thoại – bắt buộc, đúng 10 số, bắt đầu bằng 0
+        if (!phone) {
+            showFieldError('phone', 'Vui lòng nhập số điện thoại liên lạc');
+            if (!hasError) document.getElementById('phone').focus();
+            hasError = true;
+        } else if (phone.length !== 10) {
+            showFieldError('phone', `Cần đúng 10 số — bạn đang nhập ${phone.length} số`);
+            if (!hasError) document.getElementById('phone').focus();
+            hasError = true;
+        } else if (!phone.startsWith('0')) {
+            showFieldError('phone', 'Số điện thoại Việt Nam phải bắt đầu bằng 0');
+            if (!hasError) document.getElementById('phone').focus();
+            hasError = true;
+        }
+
+        // 4. Ngày sinh – không được là ngày trong tương lai
+        if (dobVal) {
+            const dob = new Date(dobVal);
+            if (dob > today) {
+                showFieldError('dob', 'Ngày sinh không thể là ngày trong tương lai');
+                if (!hasError) document.getElementById('dob').focus();
+                hasError = true;
+            }
+        }
+
+        if (hasError) return;
+
+        // ── PASS: xử lý dữ liệu ──
+        let currentPoints = 0;
+        if (editId) {
+            const ex = members.find(m => m.id == editId);
+            if (ex) currentPoints = ex.points;
+        }
+
+        const newData = {
+            id: editId ? parseInt(editId) : Date.now(),
+            kidName, dadName, momName, phone, dob: dobVal, points: currentPoints
+        };
+
+        // Kiểm tra bé dưới 12 tháng – miễn phí vé (chỉ khi thêm mới)
+        if (!editId && dobVal) {
+            const b = new Date(dobVal);
+            let ageMonths = (today.getFullYear() - b.getFullYear()) * 12 + (today.getMonth() - b.getMonth());
+            if (today.getDate() < b.getDate()) ageMonths--;
+            if (ageMonths >= 0 && ageMonths < 12) {
+                closeModal('formModal');
+                setTimeout(() => showNotification('info', '🎟 Miễn phí vé!', `Bé ${kidName} (${ageMonths} tháng tuổi) được miễn phí vé vào cổng hôm nay!`), 350);
+                return;
+            }
+        }
+
+        if (editId) members = members.map(m => m.id == editId ? newData : m);
+        else members.push(newData);
+
+        localStorage.setItem('playground_members', JSON.stringify(members));
+        render();
+        closeModal('formModal');
+    };
+
+    // ── NOTIFICATION MODAL ─────────────────────────
+    // type: 'success' | 'error' | 'info'
+    function showNotification(type, title, msg) {
+        const iconBox = document.getElementById('notifIconBox');
+        const icon    = document.getElementById('notifIcon');
+        const btn     = document.getElementById('notifBtn');
+        document.getElementById('notifTitle').textContent = title;
+        document.getElementById('notifDesc').textContent  = msg;
+
+        if (type === 'error') {
+            iconBox.className = 'modal-icon-box red';
+            icon.innerHTML = `<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>`;
+            btn.className   = 'btn-red-outline';
+            btn.textContent = 'Đóng';
+        } else if (type === 'info') {
+            iconBox.className = 'modal-icon-box amber';
+            icon.innerHTML = `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`;
+            btn.className   = 'btn-green';
+            btn.textContent = 'Đã hiểu';
+        } else {
+            iconBox.className = 'modal-icon-box green';
+            icon.innerHTML = `<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>`;
+            btn.className   = 'btn-green';
+            btn.textContent = 'Tuyệt vời';
+        }
+        btn.onclick = () => closeModal('notifModal');
+        showModal('notifModal');
+    }
+
+    // ── POINTS ─────────────────────────────────────
+    function tichdiem(id) {
+        const m = members.find(x => x.id == id);
+        if (m && m.points < 11) {
+            m.points++;
+            if (m.points === 11) {
+                showNotification('success', '🎉 Đủ điểm!', `CHÚC MỪNG BÉ ${m.kidName.toUpperCase()}!\nĐã đủ 10 điểm – Nhận ngay 1 vé MIỄN PHÍ!`);
+                m.points = 0;
+            }
+            localStorage.setItem('playground_members', JSON.stringify(members));
+            render();
+        }
+    }
+
+    // ── DELETE ─────────────────────────────────────
+    function deleteMember(id) { pendingDeleteId = id; showModal('deleteModal'); }
+    function confirmDelete() {
+        if (pendingDeleteId) {
+            members = members.filter(m => m.id != pendingDeleteId);
+            localStorage.setItem('playground_members', JSON.stringify(members));
+            render(); closeModal('deleteModal'); pendingDeleteId = null;
+        }
+    }
+
+    // ── CAPTURE ────────────────────────────────────
+    async function captureCard(id) {
+        const el   = document.getElementById(`card-${id}`);
+        const acts = el.querySelector('.card-actions');
+        acts.style.opacity = '0';
+        const canvas = await html2canvas(el, { backgroundColor: null, scale: 2 });
+        const a = document.createElement('a');
+        a.download = `The-Tich-Diem-${id}.png`;
+        a.href = canvas.toDataURL();
+        a.click();
+        acts.style.opacity = '';
+    }
+
+    // ── HELPERS ────────────────────────────────────
+    function getAge(dob) {
+        if (!dob) return 'N/A';
+        const b = new Date(dob);
+        let age = today.getFullYear() - b.getFullYear();
+        const dm = today.getMonth() - b.getMonth();
+        if (dm < 0 || (dm === 0 && today.getDate() < b.getDate())) age--;
+        return age < 1 ? 'Dưới 1 tuổi' : age + ' tuổi';
+    }
+    function isBirthday(dob) {
+        if (!dob) return false;
+        const b = new Date(dob);
+        return b.getDate() === today.getDate() && b.getMonth() === today.getMonth();
+    }
+
+    // ── SEARCH ─────────────────────────────────────
+    document.getElementById('searchInput').oninput = e => render(e.target.value.toLowerCase());
+
+    // ── RENDER ─────────────────────────────────────
+    function render(f = '') {
+        const list = members.filter(m => m.kidName.toLowerCase().includes(f) || m.phone.includes(f));
+
+        // CARDS
+        document.getElementById('cardsGrid').innerHTML = list.map(m => {
+            const bday = isBirthday(m.dob);
+            return `
+            <div id="card-${m.id}" class="member-card ${bday ? 'birthday-card' : ''}">
+                <div class="card-top">
+                    <div>
+                        <div class="card-name">${m.kidName}${bday ? ' 🎂' : ''}</div>
+                        <div class="card-sub ${bday ? 'bday-sub' : ''}">${bday ? 'Sinh nhật hôm nay!' : getAge(m.dob)}</div>
+                    </div>
+                    <div class="card-actions">
+                        <button class="card-act-btn dl" onclick="captureCard(${m.id})" title="Tải">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                        </button>
+                        <button class="card-act-btn edit" onclick="openModal(${m.id})" title="Sửa">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        </button>
+                        <button class="card-act-btn del" onclick="deleteMember(${m.id})" title="Xóa">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div class="card-parents">Bố: ${m.dadName || '—'} &nbsp;|&nbsp; Mẹ: ${m.momName || '—'}</div>
+                <div class="dots-grid">
+                    ${Array.from({length:10},(_,i) => `
+                        <div class="dot ${i < m.points ? (bday ? 'filled bday-dot' : 'filled') : ''}" onclick="tichdiem(${m.id})">
+                            ${i < m.points ? `<img src="img/logo-removed.png" alt="">` : ''}
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="card-footer">
+                    <div class="card-phone">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.87-.87a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        ${m.phone}
+                    </div>
+                    <span class="card-id">ID·${m.id.toString().slice(-4)}</span>
+                </div>
+            </div>`;
+        }).join('');
+
+        // TABLE
+        document.getElementById('memberTableBody').innerHTML = list.map(m => {
+            const bday = isBirthday(m.dob);
+            return `
+            <tr style="${bday ? 'background:rgba(255,159,10,0.08)' : ''}">
+                <td>
+                    <div class="td-name">${m.kidName}${bday ? ' 🎂' : ''}</div>
+                    <div class="td-age" style="${bday ? 'color:var(--amber)' : ''}">${bday ? 'Hôm nay sinh nhật!' : getAge(m.dob)}</div>
+                </td>
+                <td><div class="td-parents">Bố: ${m.dadName || '—'}<br>Mẹ: ${m.momName || '—'}</div></td>
+                <td><span class="td-phone">${m.phone}</span></td>
+                <td>
+                    <div class="progress-bar">
+                        <div class="progress-track">
+                            <div class="progress-fill ${bday ? 'bday' : ''}" style="width:${m.points*10}%"></div>
+                        </div>
+                        <span class="progress-label">${m.points}/10</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="td-actions">
+                        <button class="tbl-act-btn plus" onclick="tichdiem(${m.id})" title="Tích điểm">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v8M8 12h8"/></svg>
+                        </button>
+                        <button class="tbl-act-btn" onclick="openModal(${m.id})" title="Sửa">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                        </button>
+                        <button class="tbl-act-btn del" onclick="deleteMember(${m.id})" title="Xóa">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6M9 6V4h6v2"/></svg>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+    }
+
+    render();
+</script>
+</body>
+</html>
