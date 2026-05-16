@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Song Anh Kids Coffee</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
@@ -49,6 +50,24 @@
             --accent-rgb: 125,122,255;
         }
 
+        /* ── PAGE FADE-IN ─────────────────────── */
+        @keyframes pageFadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes headerSlideDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes cardFadeUp {
+            from { opacity: 0; transform: translateY(24px) scale(0.97); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes logoReveal {
+            0%   { opacity: 0; letter-spacing: 0.15em; }
+            100% { opacity: 1; letter-spacing: -0.04em; }
+        }
+
         body {
             font-family: "Kanit", -apple-system, sans-serif;
             background: var(--bg);
@@ -57,6 +76,7 @@
             overflow: hidden;
             transition: background 0.4s, color 0.4s;
             position: relative;
+            animation: pageFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
         }
 
         body::before {
@@ -99,6 +119,7 @@
             max-width: 960px;
             width: 100%;
             margin: 0 auto;
+            animation: headerSlideDown 0.55s cubic-bezier(0.22, 1, 0.36, 1) 0.05s both;
         }
 
         .header-top {
@@ -115,6 +136,7 @@
             letter-spacing: -0.04em;
             color: var(--text);
             line-height: 1;
+            animation: logoReveal 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
         }
         .wordmark span {
             font-size: 9px;
@@ -123,20 +145,28 @@
             text-transform: uppercase;
             color: var(--accent);
             margin-top: 2px;
+            animation: pageFadeIn 0.6s ease 0.3s both;
         }
 
-        .header-actions { display: flex; align-items: center; gap: 8px; }
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            animation: pageFadeIn 0.5s ease 0.2s both;
+        }
 
+        /* ── SEARCH ───────────────────────── */
         .search-wrap { position: relative; }
-        .search-wrap svg {
+        .search-wrap .search-icon {
             position: absolute; left: 12px; top: 50%;
             transform: translateY(-50%);
             width: 15px; height: 15px;
             color: var(--text3); pointer-events: none;
+            transition: color 0.2s;
         }
         input[type="text"] {
             font-family: inherit;
-            padding: 9px 14px 9px 34px;
+            padding: 9px 32px 9px 34px;
             border-radius: var(--radius-pill);
             background: var(--glass-deep);
             border: 1px solid var(--glass-border);
@@ -153,6 +183,24 @@
             box-shadow: 0 0 0 3px rgba(var(--accent-rgb),0.1);
             width: 200px;
         }
+        .search-clear-btn {
+            position: absolute; right: 9px; top: 50%;
+            transform: translateY(-50%);
+            width: 18px; height: 18px;
+            border-radius: 50%;
+            background: var(--text3);
+            border: none; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s, background 0.2s, transform 0.15s;
+            flex-shrink: 0;
+        }
+        .search-clear-btn svg { width: 9px; height: 9px; color: var(--bg2); display: block; }
+        .search-clear-btn:hover { background: var(--text2); transform: translateY(-50%) scale(1.1); }
+        .search-clear-btn:active { transform: translateY(-50%) scale(0.9); }
+        .search-wrap.has-value .search-clear-btn { opacity: 1; pointer-events: all; }
+        .search-wrap.has-value .search-icon { color: var(--accent); }
 
         .icon-btn {
             width: 38px; height: 38px;
@@ -185,8 +233,41 @@
         .add-btn:active { transform: scale(0.96); }
         .add-btn svg { width: 15px; height: 15px; }
 
+        /* ── EXCEL BUTTONS ────────────────── */
+        .excel-btn {
+            height: 38px; padding: 0 14px;
+            border-radius: var(--radius-pill);
+            border: 1.5px solid var(--glass-border);
+            background: var(--glass-deep);
+            backdrop-filter: var(--blur);
+            -webkit-backdrop-filter: var(--blur);
+            color: var(--text2); font-family: inherit;
+            font-size: 12px; font-weight: 700;
+            cursor: pointer;
+            display: flex; align-items: center; gap: 6px;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+        .excel-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+        .excel-btn.export { color: #1d6f42; border-color: rgba(29,111,66,0.3); background: rgba(29,111,66,0.08); }
+        .excel-btn.export:hover { background: rgba(29,111,66,0.15); transform: scale(1.03); border-color: rgba(29,111,66,0.5); }
+        .excel-btn.import { color: #1a56db; border-color: rgba(26,86,219,0.3); background: rgba(26,86,219,0.08); }
+        .excel-btn.import:hover { background: rgba(26,86,219,0.15); transform: scale(1.03); border-color: rgba(26,86,219,0.5); }
+        .excel-btn:active { transform: scale(0.96); }
+
+        html.dark .excel-btn.export { color: #4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.08); }
+        html.dark .excel-btn.export:hover { background: rgba(74,222,128,0.15); border-color: rgba(74,222,128,0.5); }
+        html.dark .excel-btn.import { color: #60a5fa; border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.08); }
+        html.dark .excel-btn.import:hover { background: rgba(96,165,250,0.15); border-color: rgba(96,165,250,0.5); }
+
+        #importFileInput { display: none; }
+
         /* ── SEGMENTED ────────────────────── */
-        .seg-wrap { display: flex; justify-content: center; margin-top: 16px; }
+        .seg-wrap {
+            display: flex; justify-content: center; margin-top: 16px;
+            animation: pageFadeIn 0.5s ease 0.35s both;
+        }
         .seg {
             position: relative; display: flex;
             background: var(--glass-deep);
@@ -235,7 +316,7 @@
             gap: 14px;
         }
 
-        /* ── MEMBER CARD ──────────────────── */
+        /* ── CARD STAGGERED ANIMATION ─────── */
         .member-card {
             background: var(--glass);
             border: 1px solid var(--glass-border);
@@ -247,6 +328,8 @@
             position: relative;
             transition: transform 0.25s, box-shadow 0.25s, background 0.25s;
             overflow: hidden;
+            opacity: 0;
+            animation: cardFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
         }
         .member-card::before {
             content: '';
@@ -262,11 +345,21 @@
         .birthday-card {
             background: linear-gradient(145deg, rgba(255,210,0,0.18), rgba(255,159,10,0.10)) !important;
             border-color: rgba(255,159,10,0.45) !important;
-            animation: bday-pulse 2s ease-in-out infinite;
+            animation: cardFadeUp 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards, bday-pulse 2s ease-in-out 0.6s infinite !important;
         }
         @keyframes bday-pulse {
             0%,100% { box-shadow: 0 0 0 0 rgba(255,159,10,0.3), var(--glass-shadow); }
             50% { box-shadow: 0 0 0 8px rgba(255,159,10,0), var(--glass-shadow); }
+        }
+
+        /* Table row fade-in */
+        @keyframes rowFadeIn {
+            from { opacity: 0; transform: translateX(-8px); }
+            to   { opacity: 1; transform: translateX(0); }
+        }
+        tbody tr {
+            opacity: 0;
+            animation: rowFadeIn 0.35s ease forwards;
         }
 
         .card-top {
@@ -331,16 +424,10 @@
             border-color: var(--amber);
             box-shadow: 0 2px 8px rgba(255,159,10,0.4);
         }
-
-        /* ── FIX: Logo vừa vẹn trong ô tròn ── */
         .dot img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            object-position: center;
-            border-radius: 50%;
-            display: block;
-            pointer-events: none;
+            width: 100%; height: 100%;
+            object-fit: cover; object-position: center;
+            border-radius: 50%; display: block; pointer-events: none;
         }
 
         .card-footer {
@@ -363,6 +450,7 @@
             box-shadow: var(--glass-shadow);
             border-radius: var(--radius-lg);
             overflow: hidden; flex: 1; overflow-y: auto;
+            animation: pageFadeIn 0.4s ease both;
         }
         .table-glass::-webkit-scrollbar { width: 0; }
         table { width: 100%; border-collapse: collapse; }
@@ -404,6 +492,7 @@
             flex-shrink: 0; display: flex;
             align-items: center; justify-content: center;
             padding: 10px 20px; gap: 6px;
+            animation: pageFadeIn 0.5s ease 0.5s both;
         }
         .footer-text { font-size: 9px; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text3); }
         .footer-name { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: -0.01em; }
@@ -422,7 +511,6 @@
             transition: opacity 0.3s;
         }
         .modal-overlay.visible { opacity: 1; pointer-events: all; }
-
         .modal-card {
             background: var(--glass);
             border: 1px solid var(--glass-border);
@@ -441,22 +529,14 @@
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent);
         }
         .modal-overlay.visible .modal-card { transform: translateY(0) scale(1); }
-
-        .modal-title {
-            font-size: 22px; font-weight: 800; letter-spacing: -0.03em;
-            color: var(--text); margin-bottom: 24px;
-        }
+        .modal-title { font-size: 22px; font-weight: 800; letter-spacing: -0.03em; color: var(--text); margin-bottom: 24px; }
 
         /* ── FORM FIELDS ──────────────────── */
         .form-group { margin-bottom: 16px; }
-        .form-label {
-            font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
-            text-transform: uppercase; color: var(--text2); margin-bottom: 8px; display: block;
-        }
+        .form-label { font-size: 11px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text2); margin-bottom: 8px; display: block; }
+        .form-label.required::after { content: ' *'; color: var(--red); font-weight: 800; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .form-stack { display: flex; flex-direction: column; gap: 0; }
-
-        /* Input wrapper cho inline error */
         .input-wrap { position: relative; }
         .form-input {
             width: 100%; padding: 15px 18px;
@@ -472,8 +552,6 @@
             box-shadow: 0 0 0 4px rgba(var(--accent-rgb),0.12);
             background: var(--glass); transform: translateY(-1px);
         }
-
-        /* ── INLINE ERROR ─────────────────── */
         .form-input.has-error {
             border-color: rgba(255,59,48,0.7) !important;
             box-shadow: 0 0 0 3px rgba(255,59,48,0.12) !important;
@@ -489,26 +567,14 @@
         }
         .field-error {
             display: flex; align-items: center; gap: 5px;
-            font-size: 11px; font-weight: 600;
-            color: var(--red);
-            margin-top: 6px;
-            padding: 0 4px;
-            overflow: hidden;
-            max-height: 0;
-            opacity: 0;
+            font-size: 11px; font-weight: 600; color: var(--red);
+            margin-top: 6px; padding: 0 4px;
+            overflow: hidden; max-height: 0; opacity: 0;
             transition: max-height 0.3s ease, opacity 0.25s ease, margin-top 0.25s ease;
         }
-        .field-error.visible {
-            max-height: 40px;
-            opacity: 1;
-            margin-top: 6px;
-        }
+        .field-error.visible { max-height: 40px; opacity: 1; margin-top: 6px; }
         .field-error svg { width: 11px; height: 11px; flex-shrink: 0; }
-
-        .form-actions {
-            display: flex; gap: 12px; margin-top: 24px; padding-top: 20px;
-            border-top: 1px solid var(--glass-border);
-        }
+        .form-actions { display: flex; gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--glass-border); }
         .btn-cancel {
             flex: 1; padding: 14px; border-radius: 16px;
             background: var(--glass-deep); border: 1.5px solid var(--glass-border);
@@ -516,7 +582,6 @@
             color: var(--text2); cursor: pointer; transition: all 0.2s;
         }
         .btn-cancel:hover { color: var(--text); background: var(--glass); transform: translateY(-1px); }
-        .btn-cancel:active { transform: translateY(0); }
         .btn-confirm {
             flex: 2; padding: 14px; border-radius: 16px;
             background: var(--accent); border: none;
@@ -526,9 +591,6 @@
             transition: all 0.2s;
         }
         .btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(var(--accent-rgb),0.5); }
-        .btn-confirm:active { transform: translateY(0); }
-
-        /* Alert/Notif Modals */
         .modal-icon-box {
             width: 56px; height: 56px; border-radius: 18px;
             display: flex; align-items: center; justify-content: center;
@@ -537,14 +599,15 @@
         .modal-icon-box.red { background: rgba(255,59,48,0.14); }
         .modal-icon-box.green { background: rgba(52,199,89,0.14); }
         .modal-icon-box.amber { background: rgba(255,159,10,0.14); }
+        .modal-icon-box.blue { background: rgba(26,86,219,0.12); }
         .modal-icon-box.red svg { color: var(--red); }
         .modal-icon-box.green svg { color: var(--green); }
         .modal-icon-box.amber svg { color: var(--amber); }
+        .modal-icon-box.blue svg { color: #1a56db; }
+        html.dark .modal-icon-box.blue svg { color: #60a5fa; }
         .modal-icon-box svg { width: 26px; height: 26px; }
-
         .modal-alert-title { text-align: center; font-size: 17px; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 8px; }
         .modal-alert-desc { text-align: center; font-size: 12px; font-weight: 500; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
-
         .btn-red {
             flex: 1.5; padding: 13px; border-radius: 14px;
             background: var(--red); border: none;
@@ -554,8 +617,6 @@
             transition: all 0.2s;
         }
         .btn-red:hover { transform: scale(1.02); }
-        .btn-red:active { transform: scale(0.97); }
-
         .btn-green {
             width: 100%; padding: 13px; border-radius: 14px;
             background: var(--green); border: none;
@@ -564,23 +625,71 @@
             box-shadow: 0 4px 14px rgba(52,199,89,0.3);
             transition: all 0.2s;
         }
-        .btn-green:active { transform: scale(0.97); }
-
         .btn-red-outline {
             width: 100%; padding: 13px; border-radius: 14px;
             background: rgba(255,59,48,0.12); border: none;
             font-family: inherit; font-size: 13px; font-weight: 800;
             color: var(--red); cursor: pointer; transition: all 0.2s;
         }
+        .optional-hint { font-size: 10px; font-weight: 500; color: var(--text3); margin-left: 4px; font-style: italic; }
+
+        /* ── IMPORT PREVIEW TABLE ─────────── */
+        .import-preview {
+            margin: 12px 0 0;
+            max-height: 220px;
+            overflow-y: auto;
+            border-radius: 14px;
+            border: 1px solid var(--glass-border);
+            background: var(--glass-deep);
+        }
+        .import-preview::-webkit-scrollbar { width: 0; }
+        .import-preview table { font-size: 11px; }
+        .import-preview thead th {
+            font-size: 9px; padding: 8px 12px; letter-spacing: 0.1em;
+        }
+        .import-preview tbody td { padding: 7px 12px; font-size: 11px; }
+        .import-summary {
+            font-size: 12px; font-weight: 600; color: var(--text2);
+            margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+        }
+        .badge {
+            display: inline-flex; align-items: center;
+            padding: 2px 8px; border-radius: var(--radius-pill);
+            font-size: 10px; font-weight: 800; letter-spacing: 0.06em;
+        }
+        .badge.green { background: rgba(52,199,89,0.15); color: var(--green); }
+        .badge.amber { background: rgba(255,159,10,0.15); color: var(--amber); }
+        .badge.red   { background: rgba(255,59,48,0.13);  color: var(--red); }
+
+        .import-mode-row {
+            display: flex; gap: 8px; margin-bottom: 16px;
+        }
+        .mode-btn {
+            flex: 1; padding: 10px 8px;
+            border-radius: 12px;
+            border: 1.5px solid var(--glass-border);
+            background: var(--glass-deep);
+            font-family: inherit; font-size: 11px; font-weight: 700;
+            color: var(--text2); cursor: pointer; transition: all 0.2s;
+            text-align: center; line-height: 1.3;
+        }
+        .mode-btn.active {
+            border-color: rgba(var(--accent-rgb),0.6);
+            background: rgba(var(--accent-rgb),0.1);
+            color: var(--accent);
+        }
+        .mode-btn:hover:not(.active) { background: var(--glass); }
 
         /* ── MOBILE ───────────────────────── */
-        @media (max-width: 480px) {
+        @media (max-width: 600px) {
             header { padding: 14px 14px 0; }
             main { padding: 10px 14px 0; }
-            .wordmark h1 { font-size: 20px; }
+            .wordmark h1 { font-size: 17px; }
             .add-btn span { display: none; }
-            input[type="text"] { width: 130px; font-size: 12px; }
-            input[type="text"]:focus { width: 150px; }
+            .excel-btn span { display: none; }
+            .excel-btn { width: 38px; padding: 0; justify-content: center; }
+            input[type="text"] { width: 120px; font-size: 12px; }
+            input[type="text"]:focus { width: 140px; }
             #cardsGrid { grid-template-columns: 1fr; }
             .modal-card { padding: 24px 20px; border-radius: 24px; }
             .modal-title { font-size: 19px; }
@@ -590,7 +699,6 @@
     </style>
 </head>
 <body>
-
 <div id="app">
 
     <!-- HEADER -->
@@ -601,10 +709,27 @@
                 <span>Hệ thống tích điểm</span>
             </div>
             <div class="header-actions">
-                <div class="search-wrap">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <div class="search-wrap" id="searchWrap">
+                    <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
                     <input type="text" id="searchInput" placeholder="Tên, số điện thoại…">
+                    <button class="search-clear-btn" id="searchClearBtn" title="Xóa" tabindex="-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+                    </button>
                 </div>
+
+                <!-- Xuất Excel -->
+                <button class="excel-btn export" onclick="exportExcel()" title="Xuất Excel">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="16" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    <span>Xuất Excel</span>
+                </button>
+
+                <!-- Nhập Excel -->
+                <button class="excel-btn import" onclick="document.getElementById('importFileInput').click()" title="Nhập Excel">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+                    <span>Nhập Excel</span>
+                </button>
+                <input type="file" id="importFileInput" accept=".xlsx,.xls" onchange="handleImportFile(event)">
+
                 <button class="icon-btn" onclick="toggleTheme()" id="themeBtn" title="Chế độ tối/sáng">
                     <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
                 </button>
@@ -660,9 +785,8 @@
             <form id="memberForm" novalidate>
                 <input type="hidden" id="editId">
                 <div class="form-stack">
-
                     <div class="form-group">
-                        <label class="form-label" for="kidName">Họ tên bé</label>
+                        <label class="form-label required" for="kidName">Họ tên bé</label>
                         <div class="input-wrap">
                             <input class="form-input" type="text" id="kidName" placeholder="Nhập họ tên đầy đủ" autocomplete="off">
                             <div class="field-error" id="err-kidName">
@@ -671,25 +795,19 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label class="form-label">Phụ huynh</label>
+                        <label class="form-label">Phụ huynh <span class="optional-hint">(không bắt buộc)</span></label>
                         <div class="form-row">
                             <div class="input-wrap">
-                                <input class="form-input" type="text" id="dadName" placeholder="Tên Cha" autocomplete="off">
-                                <div class="field-error" id="err-parents">
-                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                                    <span id="err-parents-msg"></span>
-                                </div>
+                                <input class="form-input" type="text" id="dadName" placeholder="Tên Cha (tuỳ chọn)" autocomplete="off">
                             </div>
                             <div class="input-wrap">
-                                <input class="form-input" type="text" id="momName" placeholder="Tên Mẹ" autocomplete="off">
+                                <input class="form-input" type="text" id="momName" placeholder="Tên Mẹ (tuỳ chọn)" autocomplete="off">
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label class="form-label" for="phone">Số điện thoại</label>
+                        <label class="form-label required" for="phone">Số điện thoại</label>
                         <div class="input-wrap">
                             <input class="form-input" type="text" id="phone" placeholder="0912 345 678" inputmode="numeric" maxlength="10" oninput="this.value=this.value.replace(/[^0-9]/g,''); clearFieldError('phone')">
                             <div class="field-error" id="err-phone">
@@ -698,18 +816,12 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group" style="margin-bottom:0;">
-                        <label class="form-label" for="dob">Ngày sinh</label>
+                        <label class="form-label">Ngày sinh <span class="optional-hint">(không bắt buộc)</span></label>
                         <div class="input-wrap">
                             <input class="form-input" type="date" id="dob">
-                            <div class="field-error" id="err-dob">
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-                                <span id="err-dob-msg"></span>
-                            </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn-cancel" onclick="closeModal('formModal')">Hủy</button>
@@ -746,42 +858,44 @@
         </div>
     </div>
 
+    <!-- IMPORT PREVIEW MODAL -->
+    <div class="modal-overlay" id="importModal">
+        <div class="modal-card" style="max-width:560px;">
+            <div class="modal-icon-box blue" style="margin-bottom:16px;">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg>
+            </div>
+            <div class="modal-alert-title">Xem trước dữ liệu nhập</div>
+            <p class="modal-alert-desc" style="margin-bottom:12px;">Kiểm tra dữ liệu trước khi lưu vào hệ thống.</p>
+
+            <div class="import-mode-row">
+                <button class="mode-btn active" id="modeMergeBtn" onclick="setImportMode('merge')">
+                    ➕ Gộp thêm<br><span style="font-weight:500;font-size:10px;color:var(--text3)">Giữ dữ liệu cũ, thêm mới</span>
+                </button>
+                <button class="mode-btn" id="modeReplaceBtn" onclick="setImportMode('replace')">
+                    🔄 Ghi đè<br><span style="font-weight:500;font-size:10px;color:var(--text3)">Xóa hết, dùng file mới</span>
+                </button>
+            </div>
+
+            <div class="import-summary" id="importSummary"></div>
+            <div class="import-preview" id="importPreview"></div>
+
+            <div class="form-actions" style="margin-top:16px;padding-top:16px;">
+                <button class="btn-cancel" onclick="closeModal('importModal'); resetImportFile()">Hủy</button>
+                <button class="btn-confirm" onclick="confirmImport()">Nhập dữ liệu</button>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <script>
-     // Tắt chuột phải
-  document.addEventListener("contextmenu", function (e) {
-    e.preventDefault();
-  });
+    document.addEventListener("contextmenu", e => e.preventDefault());
+    document.addEventListener("keydown", function(e) {
+        if (e.key === "F12") e.preventDefault();
+        if (e.ctrlKey && e.shiftKey && (e.key === "I" || e.key === "J")) e.preventDefault();
+        if (e.ctrlKey && (e.key === "u" || e.key === "s")) e.preventDefault();
+    });
 
-  // Tắt phím inspect
-  document.addEventListener("keydown", function (e) {
-    // F12
-    if (e.key === "F12") {
-      e.preventDefault();
-    }
-
-    // Ctrl+Shift+I
-    if (e.ctrlKey && e.shiftKey && e.key === "I") {
-      e.preventDefault();
-    }
-
-    // Ctrl+Shift+J
-    if (e.ctrlKey && e.shiftKey && e.key === "J") {
-      e.preventDefault();
-    }
-
-    // Ctrl+U
-    if (e.ctrlKey && e.key === "u") {
-      e.preventDefault();
-    }
-
-    // Ctrl+S
-    if (e.ctrlKey && e.key === "s") {
-      e.preventDefault();
-    }
-  });
-    
     let members = JSON.parse(localStorage.getItem('playground_members')) || [];
     let isDark = false;
     let pendingDeleteId = null;
@@ -817,14 +931,27 @@
         }
     }
 
+    // ── SEARCH ─────────────────────────────────────
+    const searchInput = document.getElementById('searchInput');
+    const searchWrap  = document.getElementById('searchWrap');
+    const searchClearBtn = document.getElementById('searchClearBtn');
+    searchInput.addEventListener('input', function() {
+        searchWrap.classList.toggle('has-value', this.value.length > 0);
+        render(this.value.toLowerCase());
+    });
+    searchClearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        searchWrap.classList.remove('has-value');
+        render('');
+        searchInput.focus();
+    });
+
     // ── MODALS ─────────────────────────────────────
     function openModal(id = null) {
-        const title = document.getElementById('formModalTitle');
-        const form = document.getElementById('memberForm');
         clearAllErrors();
         if (id) {
             const d = members.find(x => x.id == id);
-            title.textContent = 'Sửa Thông Tin';
+            document.getElementById('formModalTitle').textContent = 'Sửa Thông Tin';
             document.getElementById('editId').value = d.id;
             document.getElementById('kidName').value = d.kidName;
             document.getElementById('dadName').value = d.dadName || '';
@@ -832,129 +959,63 @@
             document.getElementById('phone').value = d.phone;
             document.getElementById('dob').value = d.dob || '';
         } else {
-            title.textContent = 'Thêm Thành Viên';
-            form.reset();
+            document.getElementById('formModalTitle').textContent = 'Thêm Thành Viên';
+            document.getElementById('memberForm').reset();
             document.getElementById('editId').value = '';
         }
         showModal('formModal');
     }
-
     function showModal(id) { document.getElementById(id).classList.add('visible'); }
     function closeModal(id) { document.getElementById(id).classList.remove('visible'); }
 
-    // ── INLINE ERROR HELPERS ───────────────────────
+    // ── INLINE ERRORS ──────────────────────────────
     function showFieldError(fieldId, message) {
         const input = document.getElementById(fieldId);
         const errDiv = document.getElementById('err-' + fieldId);
         const errMsg = document.getElementById('err-' + fieldId + '-msg');
         if (input) input.classList.add('has-error');
-        if (errDiv && errMsg) {
-            errMsg.textContent = message;
-            errDiv.classList.add('visible');
-        }
-        // focus trên field lỗi đầu tiên
+        if (errDiv && errMsg) { errMsg.textContent = message; errDiv.classList.add('visible'); }
         if (input) input.focus();
     }
-
     function clearFieldError(fieldId) {
         const input = document.getElementById(fieldId);
         const errDiv = document.getElementById('err-' + fieldId);
         if (input) input.classList.remove('has-error');
         if (errDiv) errDiv.classList.remove('visible');
     }
-
     function clearAllErrors() {
-        ['kidName','phone','dob','parents'].forEach(id => {
-            const errDiv = document.getElementById('err-' + id);
-            if (errDiv) errDiv.classList.remove('visible');
-        });
-        ['kidName','phone','dob','dadName','momName'].forEach(id => {
-            const el = document.getElementById(id);
-            if (el) el.classList.remove('has-error');
-        });
+        ['kidName','phone'].forEach(id => { const e = document.getElementById('err-' + id); if(e) e.classList.remove('visible'); });
+        ['kidName','phone','dadName','momName','dob'].forEach(id => { const e = document.getElementById(id); if(e) e.classList.remove('has-error'); });
     }
-
-    // Clear lỗi khi user bắt đầu nhập
     ['kidName','dadName','momName','dob'].forEach(id => {
         const el = document.getElementById(id);
         if (el) el.addEventListener('input', () => clearFieldError(id));
     });
 
-    // ── VALIDATE & SUBMIT ──────────────────────────
+    // ── FORM SUBMIT ────────────────────────────────
     document.getElementById('memberForm').onsubmit = (e) => {
         e.preventDefault();
         clearAllErrors();
-
-        const editId   = document.getElementById('editId').value;
-        const kidName  = document.getElementById('kidName').value.trim();
-        const dadName  = document.getElementById('dadName').value.trim();
-        const momName  = document.getElementById('momName').value.trim();
-        const phone    = document.getElementById('phone').value.trim();
-        const dobVal   = document.getElementById('dob').value;
-
+        const editId  = document.getElementById('editId').value;
+        const kidName = document.getElementById('kidName').value.trim();
+        const dadName = document.getElementById('dadName').value.trim();
+        const momName = document.getElementById('momName').value.trim();
+        const phone   = document.getElementById('phone').value.trim();
+        const dobVal  = document.getElementById('dob').value;
         let hasError = false;
-
-        // 1. Họ tên bé – bắt buộc, ít nhất 2 ký tự
-        if (!kidName) {
-            showFieldError('kidName', 'Vui lòng nhập họ tên của bé');
-            hasError = true;
-        } else if (kidName.length < 2) {
-            showFieldError('kidName', 'Họ tên quá ngắn, ít nhất 2 ký tự');
-            hasError = true;
-        }
-
-        // 2. Phụ huynh – ít nhất phải có 1 trong 2
-        if (!dadName && !momName) {
-            const errDiv = document.getElementById('err-parents');
-            const errMsg = document.getElementById('err-parents-msg');
-            document.getElementById('dadName').classList.add('has-error');
-            document.getElementById('momName').classList.add('has-error');
-            if (errMsg) errMsg.textContent = 'Cần nhập ít nhất tên Cha hoặc Mẹ';
-            if (errDiv) errDiv.classList.add('visible');
-            if (!hasError) document.getElementById('dadName').focus();
-            hasError = true;
-        }
-
-        // 3. Số điện thoại – bắt buộc, đúng 10 số, bắt đầu bằng 0
-        if (!phone) {
-            showFieldError('phone', 'Vui lòng nhập số điện thoại liên lạc');
-            if (!hasError) document.getElementById('phone').focus();
-            hasError = true;
-        } else if (phone.length !== 10) {
-            showFieldError('phone', `Cần đúng 10 số — bạn đang nhập ${phone.length} số`);
-            if (!hasError) document.getElementById('phone').focus();
-            hasError = true;
-        } else if (!phone.startsWith('0')) {
-            showFieldError('phone', 'Số điện thoại Việt Nam phải bắt đầu bằng 0');
-            if (!hasError) document.getElementById('phone').focus();
-            hasError = true;
-        }
-
-        // 4. Ngày sinh – không được là ngày trong tương lai
+        if (!kidName) { showFieldError('kidName', 'Vui lòng nhập họ tên của bé'); hasError = true; }
+        else if (kidName.length < 2) { showFieldError('kidName', 'Họ tên quá ngắn, ít nhất 2 ký tự'); hasError = true; }
+        if (!phone) { showFieldError('phone', 'Vui lòng nhập số điện thoại liên lạc'); if (!hasError) document.getElementById('phone').focus(); hasError = true; }
+        else if (phone.length !== 10) { showFieldError('phone', `Cần đúng 10 số — bạn đang nhập ${phone.length} số`); if (!hasError) document.getElementById('phone').focus(); hasError = true; }
+        else if (!phone.startsWith('0')) { showFieldError('phone', 'Số điện thoại Việt Nam phải bắt đầu bằng 0'); if (!hasError) document.getElementById('phone').focus(); hasError = true; }
         if (dobVal) {
             const dob = new Date(dobVal);
-            if (dob > today) {
-                showFieldError('dob', 'Ngày sinh không thể là ngày trong tương lai');
-                if (!hasError) document.getElementById('dob').focus();
-                hasError = true;
-            }
+            if (dob > today) { showNotification('error', '⚠️ Ngày sinh không hợp lệ', 'Ngày sinh không thể là ngày trong tương lai'); hasError = true; }
         }
-
         if (hasError) return;
-
-        // ── PASS: xử lý dữ liệu ──
         let currentPoints = 0;
-        if (editId) {
-            const ex = members.find(m => m.id == editId);
-            if (ex) currentPoints = ex.points;
-        }
-
-        const newData = {
-            id: editId ? parseInt(editId) : Date.now(),
-            kidName, dadName, momName, phone, dob: dobVal, points: currentPoints
-        };
-
-        // Kiểm tra bé dưới 12 tháng – miễn phí vé (chỉ khi thêm mới)
+        if (editId) { const ex = members.find(m => m.id == editId); if (ex) currentPoints = ex.points; }
+        const newData = { id: editId ? parseInt(editId) : Date.now(), kidName, dadName, momName, phone, dob: dobVal, points: currentPoints };
         if (!editId && dobVal) {
             const b = new Date(dobVal);
             let ageMonths = (today.getFullYear() - b.getFullYear()) * 12 + (today.getMonth() - b.getMonth());
@@ -965,39 +1026,32 @@
                 return;
             }
         }
-
         if (editId) members = members.map(m => m.id == editId ? newData : m);
         else members.push(newData);
-
         localStorage.setItem('playground_members', JSON.stringify(members));
-        render();
+        render(searchInput.value.toLowerCase());
         closeModal('formModal');
     };
 
-    // ── NOTIFICATION MODAL ─────────────────────────
-    // type: 'success' | 'error' | 'info'
+    // ── NOTIFICATION ───────────────────────────────
     function showNotification(type, title, msg) {
         const iconBox = document.getElementById('notifIconBox');
         const icon    = document.getElementById('notifIcon');
         const btn     = document.getElementById('notifBtn');
         document.getElementById('notifTitle').textContent = title;
         document.getElementById('notifDesc').textContent  = msg;
-
         if (type === 'error') {
             iconBox.className = 'modal-icon-box red';
             icon.innerHTML = `<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>`;
-            btn.className   = 'btn-red-outline';
-            btn.textContent = 'Đóng';
+            btn.className = 'btn-red-outline'; btn.textContent = 'Đóng';
         } else if (type === 'info') {
             iconBox.className = 'modal-icon-box amber';
             icon.innerHTML = `<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>`;
-            btn.className   = 'btn-green';
-            btn.textContent = 'Đã hiểu';
+            btn.className = 'btn-green'; btn.textContent = 'Đã hiểu';
         } else {
             iconBox.className = 'modal-icon-box green';
             icon.innerHTML = `<polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>`;
-            btn.className   = 'btn-green';
-            btn.textContent = 'Tuyệt vời';
+            btn.className = 'btn-green'; btn.textContent = 'Tuyệt vời';
         }
         btn.onclick = () => closeModal('notifModal');
         showModal('notifModal');
@@ -1013,7 +1067,7 @@
                 m.points = 0;
             }
             localStorage.setItem('playground_members', JSON.stringify(members));
-            render();
+            render(searchInput.value.toLowerCase());
         }
     }
 
@@ -1023,7 +1077,9 @@
         if (pendingDeleteId) {
             members = members.filter(m => m.id != pendingDeleteId);
             localStorage.setItem('playground_members', JSON.stringify(members));
-            render(); closeModal('deleteModal'); pendingDeleteId = null;
+            render(searchInput.value.toLowerCase());
+            closeModal('deleteModal');
+            pendingDeleteId = null;
         }
     }
 
@@ -1055,18 +1111,615 @@
         return b.getDate() === today.getDate() && b.getMonth() === today.getMonth();
     }
 
-    // ── SEARCH ─────────────────────────────────────
-    document.getElementById('searchInput').oninput = e => render(e.target.value.toLowerCase());
+    // ─────────────────────────────────────────────────────────────────────
+    // ── EXPORT EXCEL (NÂNG CẤP: màu sắc đẹp + filter + freeze + chart) ──
+    // ─────────────────────────────────────────────────────────────────────
+    function exportExcel() {
+        if (members.length === 0) {
+            showNotification('error', 'Không có dữ liệu', 'Chưa có thành viên nào để xuất. Hãy thêm ít nhất một bé!');
+            return;
+        }
+
+        const wb = XLSX.utils.book_new();
+        const exportDate = new Date().toLocaleDateString('vi-VN');
+        const exportDateISO = new Date().toISOString().slice(0,10);
+
+        // ──────────────────────────────────────────────
+        // SHEET 1: DANH SÁCH THÀNH VIÊN
+        // ──────────────────────────────────────────────
+        const dataRows = members.map(m => {
+            const dob = m.dob ? new Date(m.dob) : null;
+            let age = 'N/A';
+            if (dob) {
+                let a = today.getFullYear() - dob.getFullYear();
+                const dm = today.getMonth() - dob.getMonth();
+                if (dm < 0 || (dm === 0 && today.getDate() < dob.getDate())) a--;
+                age = a < 1 ? 'Dưới 1 tuổi' : a + ' tuổi';
+            }
+            const bday = m.dob && isBirthday(m.dob);
+            return [
+                m.kidName,
+                m.dadName || '',
+                m.momName || '',
+                m.phone,
+                m.dob || '',
+                age,
+                m.points,
+                m.points >= 8 ? '🔥 Sắp đủ' : m.points >= 5 ? '⭐ Tiến tốt' : '🌱 Mới bắt đầu',
+                bday ? '🎂 Hôm nay!' : ''
+            ];
+        });
+
+        // Title rows + header
+        const titleRows = [
+            ['🏡 KHU VUI CHƠI SONG ANH KIDS COFFEE', '', '', '', '', '', '', '', ''],
+            ['HỆ THỐNG TÍCH ĐIỂM THÀNH VIÊN', '', '', '', '', '', '', '', ''],
+            [`Xuất ngày: ${exportDate}  |  Tổng thành viên: ${members.length}`, '', '', '', '', '', '', '', ''],
+            [''],
+            ['HỌ TÊN BÉ', 'TÊN BỐ', 'TÊN MẸ', 'SỐ ĐIỆN THOẠI', 'NGÀY SINH', 'TUỔI', 'ĐIỂM TÍCH LŨY', 'TRẠNG THÁI', 'SINH NHẬT']
+        ];
+
+        const allRows = [...titleRows, ...dataRows];
+        const ws = XLSX.utils.aoa_to_sheet(allRows);
+
+        // ── Merge title cells ──
+        ws['!merges'] = [
+            { s: { r:0, c:0 }, e: { r:0, c:8 } },
+            { s: { r:1, c:0 }, e: { r:1, c:8 } },
+            { s: { r:2, c:0 }, e: { r:2, c:8 } },
+        ];
+
+        // ── Column widths ──
+        ws['!cols'] = [
+            { wch: 28 }, // Tên bé
+            { wch: 22 }, // Bố
+            { wch: 22 }, // Mẹ
+            { wch: 18 }, // SĐT
+            { wch: 16 }, // Ngày sinh
+            { wch: 14 }, // Tuổi
+            { wch: 18 }, // Điểm
+            { wch: 18 }, // Trạng thái
+            { wch: 16 }, // Sinh nhật
+        ];
+
+        // ── Row heights ──
+        ws['!rows'] = [
+            { hpt: 36 }, // Title 1
+            { hpt: 24 }, // Title 2
+            { hpt: 20 }, // Subtitle
+            { hpt: 8  }, // Spacer
+            { hpt: 32 }, // Header
+        ];
+        // Data rows height
+        for (let i = 0; i < members.length; i++) {
+            ws['!rows'].push({ hpt: 22 });
+        }
+
+        // ── Freeze header row ──
+        ws['!freeze'] = { xSplit: 0, ySplit: 5, topLeftCell: 'A6' };
+
+        // ── AutoFilter on header row ──
+        ws['!autofilter'] = { ref: `A5:I${5 + members.length}` };
+
+        // ─── STYLES ───────────────────────────────────
+        // Màu chủ đạo: xanh đậm thương hiệu
+        const C = {
+            brandDark:  '1E3A5F',  // tiêu đề chính – navy
+            brandMid:   '2D6A9F',  // header row – xanh dương
+            brandLight: 'EBF4FF',  // zebra even
+            white:      'FFFFFF',
+            gold:       'FFD700',
+            amber:      'FF9F0A',
+            green:      '1D6F42',
+            greenLight: 'E8F5E9',
+            greenMid:   'C8E6C9',
+            orange:     'E65100',
+            orangeLight:'FFF3E0',
+            red:        'C62828',
+            redLight:   'FFEBEE',
+            gray:       'F5F5F5',
+            grayBorder: 'BDBDBD',
+            textDark:   '1A1A2E',
+            textMid:    '37474F',
+            accent:     '5856D6',
+            accentLight:'EDE7F6',
+        };
+
+        const border = {
+            top:    { style: 'thin', color: { rgb: C.grayBorder } },
+            bottom: { style: 'thin', color: { rgb: C.grayBorder } },
+            left:   { style: 'thin', color: { rgb: C.grayBorder } },
+            right:  { style: 'thin', color: { rgb: C.grayBorder } },
+        };
+        const borderBold = {
+            top:    { style: 'medium', color: { rgb: C.brandMid } },
+            bottom: { style: 'medium', color: { rgb: C.brandMid } },
+            left:   { style: 'medium', color: { rgb: C.brandMid } },
+            right:  { style: 'medium', color: { rgb: C.brandMid } },
+        };
+
+        // Helper: set cell style
+        function sc(ref, style) {
+            if (!ws[ref]) ws[ref] = { v: '', t: 's' };
+            ws[ref].s = style;
+        }
+
+        // ── Row 1: Main title ──
+        sc('A1', {
+            font: { bold: true, sz: 18, color: { rgb: C.white }, name: 'Calibri' },
+            fill: { patternType: 'solid', fgColor: { rgb: C.brandDark } },
+            alignment: { horizontal: 'center', vertical: 'center' },
+            border: { bottom: { style: 'medium', color: { rgb: C.gold } } }
+        });
+
+        // ── Row 2: Sub title ──
+        sc('A2', {
+            font: { bold: true, sz: 13, color: { rgb: C.gold }, name: 'Calibri', italic: true },
+            fill: { patternType: 'solid', fgColor: { rgb: C.brandDark } },
+            alignment: { horizontal: 'center', vertical: 'center' },
+        });
+
+        // ── Row 3: Export info ──
+        sc('A3', {
+            font: { sz: 10, color: { rgb: 'B0BEC5' }, italic: true, name: 'Calibri' },
+            fill: { patternType: 'solid', fgColor: { rgb: C.brandDark } },
+            alignment: { horizontal: 'center', vertical: 'center' },
+        });
+
+        // Fill rest of title rows for merge visual
+        ['B1','C1','D1','E1','F1','G1','H1','I1',
+         'B2','C2','D2','E2','F2','G2','H2','I2',
+         'B3','C3','D3','E3','F3','G3','H3','I3'].forEach(ref => {
+            sc(ref, {
+                fill: { patternType: 'solid', fgColor: { rgb: C.brandDark } },
+            });
+        });
+
+        // ── Row 5: Column headers ──
+        const headerCols = ['A','B','C','D','E','F','G','H','I'];
+        headerCols.forEach((col, i) => {
+            const ref = col + '5';
+            sc(ref, {
+                font: { bold: true, sz: 11, color: { rgb: C.white }, name: 'Calibri' },
+                fill: { patternType: 'solid', fgColor: { rgb: C.brandMid } },
+                alignment: { horizontal: 'center', vertical: 'center', wrapText: true },
+                border: {
+                    top:    { style: 'medium', color: { rgb: '1A4A7A' } },
+                    bottom: { style: 'medium', color: { rgb: '1A4A7A' } },
+                    left:   { style: 'thin',   color: { rgb: '3A7AB8' } },
+                    right:  { style: 'thin',   color: { rgb: '3A7AB8' } },
+                }
+            });
+        });
+
+        // ── Data rows ──
+        members.forEach((m, i) => {
+            const rowIdx = 6 + i; // 1-based row index in sheet
+            const isEven = i % 2 === 0;
+            const bday = m.dob && isBirthday(m.dob);
+            const pts = m.points;
+
+            // Base row fill
+            let rowBg = isEven ? C.brandLight : C.white;
+            if (bday) rowBg = 'FFF8E1'; // amber tint for birthday
+
+            // Points color logic
+            let ptsBg = rowBg;
+            let ptsColor = C.textDark;
+            let ptsBold = false;
+            if (pts >= 9) { ptsBg = 'FFE0B2'; ptsColor = C.orange; ptsBold = true; }
+            else if (pts >= 7) { ptsBg = C.greenLight; ptsColor = C.green; ptsBold = true; }
+            else if (pts >= 5) { ptsBg = 'E8EAF6'; ptsColor = C.accent; ptsBold = false; }
+
+            // Status cell color
+            const statusBg = pts >= 8 ? 'FFE0B2' : pts >= 5 ? C.greenLight : C.gray;
+            const statusColor = pts >= 8 ? C.orange : pts >= 5 ? C.green : '757575';
+
+            const cols = ['A','B','C','D','E','F','G','H','I'];
+            cols.forEach((col, ci) => {
+                const ref = col + rowIdx;
+                let cellStyle = {
+                    font: { sz: 10, color: { rgb: C.textDark }, name: 'Calibri' },
+                    fill: { patternType: 'solid', fgColor: { rgb: rowBg } },
+                    alignment: { vertical: 'center', horizontal: ci === 0 ? 'left' : 'center', wrapText: false },
+                    border
+                };
+
+                // Name column: bold, left align
+                if (ci === 0) {
+                    cellStyle.font = { sz: 11, bold: true, color: { rgb: C.textDark }, name: 'Calibri' };
+                    cellStyle.alignment.horizontal = 'left';
+                }
+                // Phone column: accent color, monospace-like
+                if (ci === 3) {
+                    cellStyle.font = { sz: 10, bold: true, color: { rgb: C.accent }, name: 'Calibri' };
+                }
+                // Points column: colored by value
+                if (ci === 6) {
+                    cellStyle.fill = { patternType: 'solid', fgColor: { rgb: ptsBg } };
+                    cellStyle.font = { sz: 13, bold: ptsBold, color: { rgb: ptsColor }, name: 'Calibri' };
+                    cellStyle.alignment.horizontal = 'center';
+                    cellStyle.border = {
+                        top: border.top, bottom: border.bottom,
+                        left: { style: 'medium', color: { rgb: ptsBold ? C.green : C.grayBorder } },
+                        right: { style: 'medium', color: { rgb: ptsBold ? C.green : C.grayBorder } },
+                    };
+                }
+                // Status column
+                if (ci === 7) {
+                    cellStyle.fill = { patternType: 'solid', fgColor: { rgb: statusBg } };
+                    cellStyle.font = { sz: 10, bold: true, color: { rgb: statusColor }, name: 'Calibri' };
+                }
+                // Birthday column
+                if (ci === 8 && bday) {
+                    cellStyle.fill = { patternType: 'solid', fgColor: { rgb: 'FFF9C4' } };
+                    cellStyle.font = { sz: 11, bold: true, color: { rgb: C.amber }, name: 'Calibri' };
+                }
+
+                sc(ref, cellStyle);
+            });
+
+            // Bottom border thicker every 5 rows for readability
+            if ((i + 1) % 5 === 0) {
+                cols.forEach(col => {
+                    const ref = col + rowIdx;
+                    if (ws[ref] && ws[ref].s) {
+                        ws[ref].s.border = { ...ws[ref].s.border, bottom: { style: 'medium', color: { rgb: C.brandMid } } };
+                    }
+                });
+            }
+        });
+
+        // ── Summary footer row ──
+        const summaryRow = 6 + members.length;
+        const totalPts = members.reduce((a, m) => a + m.points, 0);
+        const avgPts = members.length ? (totalPts / members.length).toFixed(1) : 0;
+        const bdayCount = members.filter(m => m.dob && isBirthday(m.dob)).length;
+
+        XLSX.utils.sheet_add_aoa(ws, [
+            [`TỔNG CỘNG: ${members.length} thành viên`, '', '',  '', '', '', `TB: ${avgPts}/10`, bdayCount > 0 ? `🎂 ${bdayCount} sinh nhật!` : '', '']
+        ], { origin: `A${summaryRow}` });
+
+        const summaryCols = ['A','B','C','D','E','F','G','H','I'];
+        summaryCols.forEach((col, ci) => {
+            sc(col + summaryRow, {
+                font: { bold: true, sz: 10, color: { rgb: C.white }, name: 'Calibri' },
+                fill: { patternType: 'solid', fgColor: { rgb: C.brandDark } },
+                alignment: { horizontal: ci === 0 ? 'left' : 'center', vertical: 'center' },
+                border: { top: { style: 'medium', color: { rgb: C.gold } } }
+            });
+        });
+        ws['!merges'].push({ s: { r: summaryRow-1, c:0 }, e: { r: summaryRow-1, c:3 } });
+
+        XLSX.utils.book_append_sheet(wb, ws, '📋 Danh sách thành viên');
+
+        // ──────────────────────────────────────────────
+        // SHEET 2: THỐNG KÊ ĐIỂM (Dashboard đẹp)
+        // ──────────────────────────────────────────────
+        const dist = [0,0,0,0,0,0,0,0,0,0,0]; // 0–10
+        members.forEach(m => { if (m.points >= 0 && m.points <= 10) dist[m.points]++; });
+        const topMembers = [...members].sort((a,b) => b.points - a.points).slice(0, 10);
+        const bdayMembers = members.filter(m => m.dob && isBirthday(m.dob));
+
+        const statsRows = [
+            ['📊 THỐNG KÊ & BẢNG XẾP HẠNG', '', '', '', '', ''],
+            [`Cập nhật: ${exportDate}`, '', '', '', '', ''],
+            [''],
+            // KPI boxes
+            ['TỔNG THÀNH VIÊN', 'TB ĐIỂM', 'SẮP ĐỦ (≥8 điểm)', 'ĐÃ ĐỦ 10 ĐIỂM', 'SINH NHẬT HÔM NAY', 'CHƯA CÓ ĐIỂM'],
+            [
+                members.length,
+                parseFloat(avgPts),
+                members.filter(m => m.points >= 8 && m.points < 10).length,
+                members.filter(m => m.points === 10).length,
+                bdayMembers.length,
+                members.filter(m => m.points === 0).length
+            ],
+            [''],
+            // Distribution
+            ['PHÂN BỐ ĐIỂM', '', 'TOP 10 THÀNH VIÊN TÍCH CỰC', '', '', ''],
+            ['Điểm', 'Số lượng', 'Hạng', 'Tên bé', 'Điểm', 'Liên hệ'],
+        ];
+
+        // Thêm distribution + top members song song
+        const maxRows = Math.max(11, topMembers.length);
+        for (let i = 0; i <= 10; i++) {
+            const top = topMembers[i];
+            statsRows.push([
+                i + ' điểm',
+                dist[i],
+                top ? `#${i+1}` : '',
+                top ? top.kidName : '',
+                top ? top.points : '',
+                top ? top.phone : '',
+            ]);
+        }
+
+        const ws2 = XLSX.utils.aoa_to_sheet(statsRows);
+        ws2['!cols'] = [
+            { wch: 18 }, { wch: 14 }, { wch: 8  },
+            { wch: 26 }, { wch: 10 }, { wch: 16 },
+        ];
+        ws2['!rows'] = [{ hpt: 30 }, { hpt: 16 }, { hpt: 8 }, { hpt: 28 }, { hpt: 28 }];
+        ws2['!merges'] = [
+            { s:{r:0,c:0}, e:{r:0,c:5} },
+            { s:{r:1,c:0}, e:{r:1,c:5} },
+            { s:{r:6,c:0}, e:{r:6,c:1} },
+            { s:{r:6,c:2}, e:{r:6,c:5} },
+        ];
+
+        // Style stats sheet
+        function sc2(ref, style) {
+            if (!ws2[ref]) ws2[ref] = { v: '', t: 's' };
+            ws2[ref].s = style;
+        }
+
+        // Title
+        sc2('A1', { font:{bold:true,sz:16,color:{rgb:C.white},name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:C.brandDark}}, alignment:{horizontal:'center',vertical:'center'} });
+        sc2('A2', { font:{sz:10,color:{rgb:'B0BEC5'},italic:true,name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:C.brandDark}}, alignment:{horizontal:'center'} });
+        ['B1','C1','D1','E1','F1','B2','C2','D2','E2','F2'].forEach(r => sc2(r, { fill:{patternType:'solid',fgColor:{rgb:C.brandDark}} }));
+
+        // KPI headers (row 4)
+        const kpiColors = [C.brandMid, '2E7D32', C.orange, 'C62828', C.amber, '757575'];
+        const kpiCols = ['A','B','C','D','E','F'];
+        kpiCols.forEach((col, i) => {
+            sc2(col+'4', {
+                font:{bold:true,sz:9,color:{rgb:C.white},name:'Calibri'},
+                fill:{patternType:'solid',fgColor:{rgb:kpiColors[i]}},
+                alignment:{horizontal:'center',vertical:'center',wrapText:true},
+                border
+            });
+            // KPI value (row 5)
+            sc2(col+'5', {
+                font:{bold:true,sz:20,color:{rgb:kpiColors[i]},name:'Calibri'},
+                fill:{patternType:'solid',fgColor:{rgb:'F8F9FA'}},
+                alignment:{horizontal:'center',vertical:'center'},
+                border:{...border, bottom:{style:'medium',color:{rgb:kpiColors[i]}}}
+            });
+        });
+
+        // Section headers (row 7)
+        sc2('A7', { font:{bold:true,sz:11,color:{rgb:C.white},name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:C.green}}, alignment:{horizontal:'center',vertical:'center'}, border });
+        sc2('B7', { fill:{patternType:'solid',fgColor:{rgb:C.green}}, border });
+        sc2('C7', { font:{bold:true,sz:11,color:{rgb:C.white},name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:C.brandMid}}, alignment:{horizontal:'center',vertical:'center'}, border });
+        ['D7','E7','F7'].forEach(r => sc2(r, { fill:{patternType:'solid',fgColor:{rgb:C.brandMid}}, border }));
+
+        // Sub-headers (row 8)
+        sc2('A8', { font:{bold:true,sz:10,color:{rgb:C.white},name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:'388E3C'}}, alignment:{horizontal:'center'}, border });
+        sc2('B8', { font:{bold:true,sz:10,color:{rgb:C.white},name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:'388E3C'}}, alignment:{horizontal:'center'}, border });
+        ['C8','D8','E8','F8'].forEach(r => sc2(r, { font:{bold:true,sz:10,color:{rgb:C.white},name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:'1565C0'}}, alignment:{horizontal:'center'}, border }));
+
+        // Distribution data rows
+        for (let i = 0; i <= 10; i++) {
+            const r = 9 + i;
+            const pct = members.length > 0 ? dist[i] / members.length : 0;
+            let barBg = C.gray;
+            if (i >= 9) barBg = 'FFCCBC';
+            else if (i >= 7) barBg = C.greenLight;
+            else if (i >= 5) barBg = C.accentLight;
+
+            sc2(`A${r}`, { font:{sz:11,bold:true,color:{rgb:C.textDark}}, fill:{patternType:'solid',fgColor:{rgb:barBg}}, alignment:{horizontal:'center'}, border });
+            sc2(`B${r}`, { font:{sz:11,bold:true,color:{rgb:dist[i]>0?C.brandMid:'9E9E9E'}}, fill:{patternType:'solid',fgColor:{rgb:barBg}}, alignment:{horizontal:'center'}, border });
+
+            // Top members
+            const top = topMembers[i];
+            if (top) {
+                const rankBg = i === 0 ? 'FFF9C4' : i === 1 ? 'F5F5F5' : i === 2 ? 'FBE9E7' : C.white;
+                sc2(`C${r}`, { font:{bold:true,sz:10,color:{rgb:i<3?C.amber:C.textMid}}, fill:{patternType:'solid',fgColor:{rgb:rankBg}}, alignment:{horizontal:'center'}, border });
+                sc2(`D${r}`, { font:{bold:i===0,sz:11,color:{rgb:C.textDark}}, fill:{patternType:'solid',fgColor:{rgb:rankBg}}, alignment:{horizontal:'left'}, border });
+                sc2(`E${r}`, { font:{bold:true,sz:12,color:{rgb:top.points>=8?C.green:C.accent}}, fill:{patternType:'solid',fgColor:{rgb:rankBg}}, alignment:{horizontal:'center'}, border });
+                sc2(`F${r}`, { font:{sz:10,color:{rgb:C.accent}}, fill:{patternType:'solid',fgColor:{rgb:rankBg}}, alignment:{horizontal:'center'}, border });
+            }
+        }
+
+        XLSX.utils.book_append_sheet(wb, ws2, '📊 Thống kê');
+
+        // ──────────────────────────────────────────────
+        // SHEET 3: HƯỚNG DẪN
+        // ──────────────────────────────────────────────
+        const guideRows = [
+            ['📖 HƯỚNG DẪN SỬ DỤNG FILE EXCEL', '', '', ''],
+            [''],
+            ['Cột', 'Mô tả', 'Bắt buộc', 'Ví dụ'],
+            ['Họ tên bé', 'Họ và tên đầy đủ của bé', '✅ Có', 'Nguyễn Văn An'],
+            ['Tên Bố', 'Họ tên của bố (có thể bỏ trống)', '❌ Không', 'Nguyễn Văn Bình'],
+            ['Tên Mẹ', 'Họ tên của mẹ (có thể bỏ trống)', '❌ Không', 'Trần Thị Cẩm'],
+            ['Số điện thoại', 'Số điện thoại 10 chữ số, bắt đầu bằng 0', '✅ Có', '0912345678'],
+            ['Ngày sinh', 'Định dạng: YYYY-MM-DD', '❌ Không', '2019-06-15'],
+            ['Điểm tích lũy', 'Số nguyên từ 0 đến 10', '❌ Không', '5'],
+            [''],
+            ['⚠️ LƯU Ý KHI NHẬP LẠI', '', '', ''],
+            ['• Không thay đổi tên các cột (hàng đầu tiên)', '', '', ''],
+            ['• Số điện thoại: đúng 10 số, bắt đầu bằng 0', '', '', ''],
+            ['• Ngày sinh: định dạng YYYY-MM-DD (ví dụ: 2020-03-25)', '', '', ''],
+            ['• Điểm: số từ 0 đến 10, để trống = 0 điểm', '', '', ''],
+        ];
+        const ws3 = XLSX.utils.aoa_to_sheet(guideRows);
+        ws3['!cols'] = [{ wch: 26 }, { wch: 44 }, { wch: 14 }, { wch: 22 }];
+        ws3['!merges'] = [
+            { s:{r:0,c:0}, e:{r:0,c:3} },
+            { s:{r:10,c:0}, e:{r:10,c:3} },
+        ];
+        function sc3(ref, style) {
+            if (!ws3[ref]) ws3[ref] = { v:'', t:'s' };
+            ws3[ref].s = style;
+        }
+        sc3('A1', { font:{bold:true,sz:15,color:{rgb:C.white},name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:C.brandDark}}, alignment:{horizontal:'center',vertical:'center'} });
+        ['B1','C1','D1'].forEach(r => sc3(r, { fill:{patternType:'solid',fgColor:{rgb:C.brandDark}} }));
+        ['A3','B3','C3','D3'].forEach(r => sc3(r, { font:{bold:true,sz:10,color:{rgb:C.white},name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:C.brandMid}}, alignment:{horizontal:'center'}, border }));
+        for (let i = 3; i <= 8; i++) {
+            const r = i + 1;
+            const bg = i % 2 === 0 ? C.brandLight : C.white;
+            ['A','B','C','D'].forEach(col => sc3(col+r, { font:{sz:10,color:{rgb:C.textDark},name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:bg}}, alignment:{horizontal:'left',vertical:'center'}, border }));
+            sc3('C'+r, { font:{sz:11,bold:true,color:{rgb:i===3||i===5?C.green:C.red},name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:bg}}, alignment:{horizontal:'center'}, border });
+        }
+        sc3('A11', { font:{bold:true,sz:11,color:{rgb:C.white},name:'Calibri'}, fill:{patternType:'solid',fgColor:{rgb:C.orange}}, alignment:{horizontal:'center',vertical:'center'} });
+        ['B11','C11','D11'].forEach(r => sc3(r, { fill:{patternType:'solid',fgColor:{rgb:C.orange}} }));
+
+        XLSX.utils.book_append_sheet(wb, ws3, '📖 Hướng dẫn');
+
+        // ── WRITE FILE ──
+        XLSX.writeFile(wb, `SongAnh-ThanhVien-${exportDateISO}.xlsx`);
+        showNotification('success', '✅ Xuất thành công!', `Đã xuất ${members.length} thành viên ra file Excel với 3 sheet: Danh sách, Thống kê và Hướng dẫn.`);
+    }
+
+    // ─────────────────────────────────────────────
+    // ── IMPORT EXCEL ──────────────────────────────
+    // ─────────────────────────────────────────────
+    let importMode = 'merge';
+    let pendingImportData = [];
+
+    function setImportMode(mode) {
+        importMode = mode;
+        document.getElementById('modeMergeBtn').classList.toggle('active', mode === 'merge');
+        document.getElementById('modeReplaceBtn').classList.toggle('active', mode === 'replace');
+        updateImportSummary();
+    }
+
+    function resetImportFile() {
+        document.getElementById('importFileInput').value = '';
+        pendingImportData = [];
+    }
+
+    function updateImportSummary() {
+        const total = pendingImportData.length;
+        const valid = pendingImportData.filter(r => r._valid).length;
+        const invalid = total - valid;
+        let txt = '';
+        if (importMode === 'merge') {
+            txt = `Gộp thêm <span class="badge green">${valid} hợp lệ</span>`;
+            if (invalid > 0) txt += ` <span class="badge red">${invalid} lỗi (bỏ qua)</span>`;
+            txt += ` vào ${members.length} thành viên hiện có`;
+        } else {
+            txt = `Ghi đè toàn bộ bằng <span class="badge green">${valid} hợp lệ</span>`;
+            if (invalid > 0) txt += ` <span class="badge red">${invalid} lỗi (bỏ qua)</span>`;
+            txt += ` — xóa ${members.length} thành viên cũ`;
+        }
+        document.getElementById('importSummary').innerHTML = txt;
+    }
+
+    function handleImportFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const data = new Uint8Array(e.target.result);
+                const wb = XLSX.read(data, { type: 'array', cellDates: true });
+                const sheetName = wb.SheetNames[0];
+                const ws = wb.Sheets[sheetName];
+                const rows = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
+
+                if (rows.length < 2) {
+                    showNotification('error', '❌ File rỗng', 'File Excel không có dữ liệu hoặc thiếu header.');
+                    resetImportFile(); return;
+                }
+
+                // Find header row (skip title rows)
+                let headerRowIdx = 0;
+                for (let i = 0; i < Math.min(rows.length, 8); i++) {
+                    const r = rows[i].map(h => String(h).toLowerCase().trim());
+                    if (r.some(h => h.includes('tên bé') || h.includes('ten be') || h.includes('họ tên') || h.includes('phone') || h.includes('điện thoại'))) {
+                        headerRowIdx = i; break;
+                    }
+                }
+
+                const headerRow = rows[headerRowIdx].map(h => String(h).toLowerCase().trim());
+                const findCol = (...keywords) => {
+                    for (const kw of keywords) {
+                        const idx = headerRow.findIndex(h => h.includes(kw));
+                        if (idx !== -1) return idx;
+                    }
+                    return -1;
+                };
+
+                const colKid   = findCol('tên bé', 'ten be', 'họ tên', 'ho ten', 'tên');
+                const colDad   = findCol('bố', 'bo', 'dad', 'father', 'cha');
+                const colMom   = findCol('mẹ', 'me', 'mom', 'mother');
+                const colPhone = findCol('điện thoại', 'dien thoai', 'phone', 'sdt', 'liên hệ');
+                const colDob   = findCol('ngày sinh', 'ngay sinh', 'dob', 'birth');
+                const colPts   = findCol('điểm', 'diem', 'points', 'tích lũy');
+
+                if (colKid === -1 || colPhone === -1) {
+                    showNotification('error', '❌ Sai định dạng', 'File thiếu cột "Tên bé" hoặc "Số điện thoại".');
+                    resetImportFile(); return;
+                }
+
+                pendingImportData = rows.slice(headerRowIdx + 1).map((row, idx) => {
+                    const kidName  = String(row[colKid]   || '').trim();
+                    const dadName  = colDad  >= 0 ? String(row[colDad]  || '').trim() : '';
+                    const momName  = colMom  >= 0 ? String(row[colMom]  || '').trim() : '';
+                    const phone    = String(row[colPhone] || '').replace(/\D/g,'');
+                    let   dob      = '';
+                    if (colDob >= 0 && row[colDob]) {
+                        const raw = row[colDob];
+                        if (raw instanceof Date) dob = raw.toISOString().slice(0,10);
+                        else {
+                            const s = String(raw).trim();
+                            if (/^\d{4}-\d{2}-\d{2}$/.test(s)) dob = s;
+                            else if (/^\d{2}\/\d{2}\/\d{4}$/.test(s)) { const [d,m,y] = s.split('/'); dob = `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`; }
+                            else if (/^\d{8}$/.test(s)) dob = `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`;
+                        }
+                    }
+                    const rawPts = colPts >= 0 ? row[colPts] : '';
+                    const points = Math.min(10, Math.max(0, parseInt(rawPts) || 0));
+                    const errors = [];
+                    if (!kidName || kidName.length < 2) errors.push('Thiếu tên bé');
+                    if (!phone || phone.length !== 10 || !phone.startsWith('0')) errors.push('SĐT không hợp lệ');
+                    if (dob && new Date(dob) > today) errors.push('Ngày sinh tương lai');
+                    const id = Date.now() + idx + Math.random() * 100 | 0;
+                    return { id, kidName, dadName, momName, phone, dob, points, _valid: errors.length === 0, _errors: errors };
+                }).filter(r => r.kidName || r.phone);
+
+                if (pendingImportData.length === 0) {
+                    showNotification('error', '❌ Không có dữ liệu', 'File không có dòng dữ liệu nào.');
+                    resetImportFile(); return;
+                }
+
+                let previewHtml = `<table><thead><tr><th>Tên bé</th><th>Bố</th><th>Mẹ</th><th>SĐT</th><th>Ngày sinh</th><th>Điểm</th><th>Trạng thái</th></tr></thead><tbody>`;
+                pendingImportData.slice(0, 50).forEach(r => {
+                    const status = r._valid ? `<span class="badge green">✓ OK</span>` : `<span class="badge red" title="${r._errors.join(', ')}">✗ Lỗi</span>`;
+                    previewHtml += `<tr style="${!r._valid ? 'opacity:0.5' : ''}"><td class="td-name">${r.kidName || '—'}</td><td class="td-parents">${r.dadName || '—'}</td><td class="td-parents">${r.momName || '—'}</td><td class="td-phone">${r.phone || '—'}</td><td class="td-parents">${r.dob || '—'}</td><td class="td-parents">${r.points}</td><td>${status}</td></tr>`;
+                });
+                if (pendingImportData.length > 50) previewHtml += `<tr><td colspan="7" style="text-align:center;padding:10px;color:var(--text3);font-size:11px;">... và ${pendingImportData.length - 50} dòng nữa</td></tr>`;
+                previewHtml += '</tbody></table>';
+
+                document.getElementById('importPreview').innerHTML = previewHtml;
+                updateImportSummary();
+                showModal('importModal');
+            } catch (err) {
+                showNotification('error', '❌ Đọc file thất bại', 'Không thể đọc file Excel. Hãy kiểm tra định dạng file.');
+                resetImportFile();
+            }
+        };
+        reader.readAsArrayBuffer(file);
+    }
+
+    function confirmImport() {
+        const validData = pendingImportData.filter(r => r._valid).map(r => ({
+            id: r.id, kidName: r.kidName, dadName: r.dadName,
+            momName: r.momName, phone: r.phone, dob: r.dob, points: r.points
+        }));
+        if (validData.length === 0) { showNotification('error', '❌ Không có dữ liệu hợp lệ', 'Tất cả các dòng đều bị lỗi.'); return; }
+        if (importMode === 'replace') members = validData;
+        else { validData.forEach(newM => { const idx = members.findIndex(m => m.id === newM.id); if (idx >= 0) members[idx] = newM; else members.push(newM); }); }
+        localStorage.setItem('playground_members', JSON.stringify(members));
+        render(searchInput.value.toLowerCase());
+        closeModal('importModal'); resetImportFile();
+        showNotification('success', '✅ Nhập thành công!', `${importMode === 'replace' ? 'Ghi đè' : 'Gộp thêm'}: ${validData.length} thành viên đã được lưu.`);
+    }
 
     // ── RENDER ─────────────────────────────────────
     function render(f = '') {
-        const list = members.filter(m => m.kidName.toLowerCase().includes(f) || m.phone.includes(f));
+        const list = members.filter(m =>
+            m.kidName.toLowerCase().includes(f) || m.phone.includes(f)
+        );
 
-        // CARDS
-        document.getElementById('cardsGrid').innerHTML = list.map(m => {
+        document.getElementById('cardsGrid').innerHTML = list.map((m, idx) => {
             const bday = isBirthday(m.dob);
+            const delay = Math.min(idx * 60, 400);
             return `
-            <div id="card-${m.id}" class="member-card ${bday ? 'birthday-card' : ''}">
+            <div id="card-${m.id}" class="member-card ${bday ? 'birthday-card' : ''}" style="animation-delay:${delay}ms">
                 <div class="card-top">
                     <div>
                         <div class="card-name">${m.kidName}${bday ? ' 🎂' : ''}</div>
@@ -1094,7 +1747,7 @@
                 </div>
                 <div class="card-footer">
                     <div class="card-phone">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.87-.87a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38A2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 8.82a16 16 0 0 0 6.29 6.29l.87-.87a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
                         ${m.phone}
                     </div>
                     <span class="card-id">ID·${m.id.toString().slice(-4)}</span>
@@ -1102,11 +1755,11 @@
             </div>`;
         }).join('');
 
-        // TABLE
-        document.getElementById('memberTableBody').innerHTML = list.map(m => {
+        document.getElementById('memberTableBody').innerHTML = list.map((m, idx) => {
             const bday = isBirthday(m.dob);
+            const delay = Math.min(idx * 40, 300);
             return `
-            <tr style="${bday ? 'background:rgba(255,159,10,0.08)' : ''}">
+            <tr style="${bday ? 'background:rgba(255,159,10,0.08)' : ''}; animation-delay:${delay}ms">
                 <td>
                     <div class="td-name">${m.kidName}${bday ? ' 🎂' : ''}</div>
                     <div class="td-age" style="${bday ? 'color:var(--amber)' : ''}">${bday ? 'Hôm nay sinh nhật!' : getAge(m.dob)}</div>
