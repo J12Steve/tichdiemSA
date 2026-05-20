@@ -5,7 +5,10 @@
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#5856d6">
     <title>Song Anh Kids Coffee</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -36,6 +39,8 @@
             --radius: 22px;
             --radius-lg: 32px;
             --radius-pill: 999px;
+            --safe-area-top: env(safe-area-inset-top);
+            --safe-area-bottom: env(safe-area-inset-bottom);
         }
 
         html.dark {
@@ -82,6 +87,10 @@
             transition: background 0.4s, color 0.4s;
             position: relative;
             animation: pageFadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            touch-action: pan-y;
+            overscroll-behavior: none;
         }
 
         body::before {
@@ -107,12 +116,14 @@
             display: flex;
             flex-direction: column;
             height: 100dvh;
+            padding-top: var(--safe-area-top);
+            padding-bottom: var(--safe-area-bottom);
         }
 
         /* ── SYNC STATUS BANNER ─────────────── */
         #syncBanner {
             position: fixed;
-            top: 12px;
+            top: calc(12px + var(--safe-area-top));
             left: 50%;
             transform: translateX(-50%) translateY(-60px);
             z-index: 999;
@@ -225,6 +236,7 @@
             color: var(--text);
             width: 170px; outline: none;
             transition: all 0.25s;
+            -webkit-appearance: none;
         }
         input[type="text"]::placeholder { color: var(--text3); }
         input[type="text"]:focus {
@@ -260,8 +272,8 @@
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; color: var(--text2);
             transition: all 0.2s; flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
         }
-        .icon-btn:hover { transform: scale(1.06); background: var(--glass); }
         .icon-btn:active { transform: scale(0.94); }
         .icon-btn svg { width: 17px; height: 17px; }
 
@@ -276,8 +288,8 @@
             transition: all 0.2s;
             box-shadow: 0 4px 16px rgba(var(--accent-rgb),0.35);
             flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
         }
-        .add-btn:hover { transform: scale(1.04); box-shadow: 0 6px 20px rgba(var(--accent-rgb),0.45); }
         .add-btn:active { transform: scale(0.96); }
         .add-btn svg { width: 15px; height: 15px; }
 
@@ -318,11 +330,12 @@
             background: var(--glass-deep); border: 1px solid var(--glass-border);
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; color: var(--text2); transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
-        .settings-close:hover { background: var(--glass); transform: scale(1.08); }
+        .settings-close:active { transform: scale(0.92); }
         .settings-close svg { width: 16px; height: 16px; }
 
-        .settings-content { flex: 1; overflow-y: auto; padding: 24px; }
+        .settings-content { flex: 1; overflow-y: auto; padding: 24px; -webkit-overflow-scrolling: touch; }
         .settings-content::-webkit-scrollbar { width: 0; }
 
         .settings-section { margin-bottom: 32px; }
@@ -338,7 +351,6 @@
             border-radius: 18px; padding: 18px; margin-bottom: 12px;
             transition: all 0.25s;
         }
-        .settings-item:hover { background: var(--glass); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(0,0,0,0.08); }
 
         .firebase-status {
             display: flex; align-items: center; gap: 10px;
@@ -367,6 +379,7 @@
             position: relative; width: 52px; height: 32px;
             background: var(--glass-border); border-radius: 999px;
             cursor: pointer; transition: background 0.3s; flex-shrink: 0;
+            -webkit-tap-highlight-color: transparent;
         }
         .toggle-switch.active { background: var(--accent); }
         .toggle-knob {
@@ -384,20 +397,16 @@
             font-family: inherit; font-size: 14px; font-weight: 700; color: var(--text);
             cursor: pointer; display: flex; align-items: center; justify-content: center;
             gap: 8px; transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
         }
-        .action-btn:hover { background: var(--glass); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
-        .action-btn:active { transform: translateY(0); }
+        .action-btn:active { transform: scale(0.98); }
         .action-btn svg { width: 16px; height: 16px; }
 
         .action-btn.export { color: #1d6f42; border-color: rgba(29,111,66,0.3); background: rgba(29,111,66,0.08); }
-        .action-btn.export:hover { background: rgba(29,111,66,0.15); border-color: rgba(29,111,66,0.5); }
         .action-btn.import { color: #1a56db; border-color: rgba(26,86,219,0.3); background: rgba(26,86,219,0.08); }
-        .action-btn.import:hover { background: rgba(26,86,219,0.15); border-color: rgba(26,86,219,0.5); }
 
         html.dark .action-btn.export { color: #4ade80; border-color: rgba(74,222,128,0.3); background: rgba(74,222,128,0.08); }
-        html.dark .action-btn.export:hover { background: rgba(74,222,128,0.15); border-color: rgba(74,222,128,0.5); }
         html.dark .action-btn.import { color: #60a5fa; border-color: rgba(96,165,250,0.3); background: rgba(96,165,250,0.08); }
-        html.dark .action-btn.import:hover { background: rgba(96,165,250,0.15); border-color: rgba(96,165,250,0.5); }
 
         #importFileInput { display: none; }
 
@@ -427,6 +436,7 @@
             font-size: 11px; font-weight: 700;
             letter-spacing: 0.08em; text-transform: uppercase;
             cursor: pointer; border-radius: var(--radius-pill); transition: color 0.25s;
+            -webkit-tap-highlight-color: transparent;
         }
         .seg button.active { color: var(--text); }
         .seg button:not(.active) { color: var(--text3); }
@@ -438,7 +448,7 @@
             max-width: 960px; width: 100%; margin: 0 auto;
         }
 
-        #viewCards { height: 100%; overflow-y: auto; padding-bottom: 80px; }
+        #viewCards { height: 100%; overflow-y: auto; padding-bottom: 80px; -webkit-overflow-scrolling: touch; }
         #viewCards::-webkit-scrollbar { width: 0; }
 
         #cardsGrid {
@@ -489,8 +499,9 @@
             font-family: inherit; font-size: 13px; font-weight: 700; color: #fff;
             cursor: pointer; transition: all 0.2s;
             box-shadow: 0 4px 14px rgba(var(--accent-rgb),0.35);
+            -webkit-tap-highlight-color: transparent;
         }
-        .btn-retry:hover { transform: scale(1.04); }
+        .btn-retry:active { transform: scale(0.96); }
 
         #emptyState {
             display: none; flex-direction: column;
@@ -519,10 +530,6 @@
         .member-card::before {
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
             background: linear-gradient(90deg, transparent, rgba(255,255,255,0.7), transparent);
-        }
-        .member-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 16px 48px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.06);
         }
 
         .birthday-card {
@@ -558,20 +565,17 @@
         .card-sub { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-top: 3px; }
         .card-sub.bday-sub { color: var(--amber); }
 
-        .card-actions { display: flex; gap: 2px; opacity: 0; transition: opacity 0.2s; }
-        .member-card:hover .card-actions { opacity: 1; }
+        .card-actions { display: flex; gap: 2px; }
 
         .card-act-btn {
-            width: 30px; height: 30px; border-radius: 10px;
+            width: 34px; height: 34px; border-radius: 10px;
             background: var(--glass-deep); border: 1px solid var(--glass-border);
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; color: var(--text3); transition: all 0.18s;
+            -webkit-tap-highlight-color: transparent;
         }
-        .card-act-btn:hover { color: var(--text); background: var(--glass); }
-        .card-act-btn.del:hover { color: var(--red); }
-        .card-act-btn.edit:hover { color: var(--accent); }
-        .card-act-btn.dl:hover { color: #007aff; }
-        .card-act-btn svg { width: 13px; height: 13px; }
+        .card-act-btn:active { transform: scale(0.92); }
+        .card-act-btn svg { width: 14px; height: 14px; }
 
         .card-parents { font-size: 10px; font-weight: 600; color: var(--text3); letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 14px; }
 
@@ -587,8 +591,8 @@
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; overflow: hidden; background: transparent; position: relative;
             transition: all 0.2s cubic-bezier(0.34,1.56,0.64,1);
+            -webkit-tap-highlight-color: transparent;
         }
-        .dot:hover { transform: scale(1.12); border-color: var(--accent); }
         .dot:active { transform: scale(0.9); }
         .dot.filled { background: var(--accent); border-color: var(--accent); box-shadow: 0 2px 8px rgba(var(--accent-rgb),0.4); }
         .dot.filled.bday-dot { background: var(--amber); border-color: var(--amber); box-shadow: 0 2px 8px rgba(255,159,10,0.4); }
@@ -611,6 +615,7 @@
             box-shadow: var(--glass-shadow); border-radius: var(--radius-lg);
             overflow: hidden; flex: 1; overflow-y: auto;
             animation: pageFadeIn 0.4s ease both;
+            -webkit-overflow-scrolling: touch;
         }
         .table-glass::-webkit-scrollbar { width: 0; }
         table { width: 100%; border-collapse: collapse; }
@@ -620,9 +625,8 @@
             position: sticky; top: 0; border-bottom: 1px solid var(--glass-border);
             backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
         }
-        tbody tr { border-bottom: 1px solid var(--glass-border); transition: background 0.15s; }
+        tbody tr { border-bottom: 1px solid var(--glass-border); }
         tbody tr:last-child { border-bottom: none; }
-        tbody tr:hover { background: var(--glass-deep); }
         tbody td { padding: 14px 18px; }
         .td-name { font-size: 13px; font-weight: 800; color: var(--text); }
         .td-age { font-size: 10px; font-weight: 500; color: var(--text3); margin-top: 2px; }
@@ -634,27 +638,35 @@
         .progress-fill.bday { background: var(--amber); }
         .progress-label { font-size: 10px; font-weight: 800; color: var(--text2); }
         .tbl-act-btn {
-            width: 32px; height: 32px; border-radius: 10px;
+            width: 36px; height: 36px; border-radius: 10px;
             background: none; border: none;
             display: inline-flex; align-items: center; justify-content: center;
             cursor: pointer; color: var(--text3); transition: all 0.18s;
+            -webkit-tap-highlight-color: transparent;
         }
-        .tbl-act-btn:hover { background: var(--glass-deep); color: var(--text); transform: scale(1.1); }
-        .tbl-act-btn.plus:hover { color: var(--accent); }
-        .tbl-act-btn.del:hover { color: var(--red); }
+        .tbl-act-btn:active { transform: scale(0.92); }
         .tbl-act-btn svg { width: 15px; height: 15px; }
         .td-actions { display: flex; justify-content: flex-end; gap: 2px; }
 
         /* ── FOOTER ─────────────────────────── */
-        footer {
-            flex-shrink: 0; display: flex;
-            align-items: center; justify-content: center;
-            padding: 10px 20px; gap: 6px;
-            animation: pageFadeIn 0.5s ease 0.5s both;
+        
+        .page-footer {
+            text-align: center; padding: 32px 0;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
         }
-        .footer-text { font-size: 9px; font-weight: 600; letter-spacing: 0.3em; text-transform: uppercase; color: var(--text3); }
-        .footer-name { font-size: 12px; font-weight: 800; color: var(--accent); letter-spacing: -0.01em; }
-        .footer-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); animation: pulse-dot 2s ease-in-out infinite; }
+        .footer-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; border-radius: var(--radius-pill);
+            background: var(--glass); border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            font-size: 11px; font-weight: 700; color: var(--text3);
+        }
+        .footer-badge span { color: var(--accent); font-weight: 800; }
+        .footer-dot {
+            width: 5px; height: 5px; border-radius: 50%;
+            background: var(--accent);
+            animation: pulseDot 2s ease-in-out infinite;
+        }
         @keyframes pulse-dot { 0%,100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.7); } }
 
         /* ── MODALS ─────────────────────────── */
@@ -665,6 +677,7 @@
             backdrop-filter: blur(20px) saturate(1.4);
             -webkit-backdrop-filter: blur(20px) saturate(1.4);
             opacity: 0; pointer-events: none; transition: opacity 0.3s;
+            padding-bottom: calc(20px + var(--safe-area-bottom));
         }
         .modal-overlay.visible { opacity: 1; pointer-events: all; }
         .modal-card {
@@ -675,6 +688,9 @@
             transform: translateY(20px) scale(0.95);
             transition: transform 0.35s cubic-bezier(0.34,1.2,0.64,1);
             position: relative; overflow: hidden;
+            max-height: calc(100dvh - 40px - var(--safe-area-top) - var(--safe-area-bottom));
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
         .modal-card::before {
             content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
@@ -690,16 +706,19 @@
         .form-stack { display: flex; flex-direction: column; gap: 0; }
         .input-wrap { position: relative; }
         .form-input {
-            width: 100%; padding: 15px 18px; border-radius: 16px;
+            width: 100%; padding: 16px 18px; border-radius: 16px;
             background: var(--glass-deep); border: 1.5px solid var(--glass-border);
             font-family: inherit; font-size: 15px; font-weight: 500;
             color: var(--text); outline: none; transition: all 0.25s;
+            -webkit-appearance: none;
+            appearance: none;
+            min-height: 52px;
         }
         .form-input::placeholder { color: var(--text3); }
         .form-input:focus {
             border-color: rgba(var(--accent-rgb),0.6);
             box-shadow: 0 0 0 4px rgba(var(--accent-rgb),0.12);
-            background: var(--glass); transform: translateY(-1px);
+            background: var(--glass);
         }
         .form-input.has-error {
             border-color: rgba(255,59,48,0.7) !important;
@@ -725,20 +744,24 @@
         .field-error svg { width: 11px; height: 11px; flex-shrink: 0; }
         .form-actions { display: flex; gap: 12px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--glass-border); }
         .btn-cancel {
-            flex: 1; padding: 14px; border-radius: 16px;
+            flex: 1; padding: 16px; border-radius: 16px;
             background: var(--glass-deep); border: 1.5px solid var(--glass-border);
             font-family: inherit; font-size: 14px; font-weight: 700;
             color: var(--text2); cursor: pointer; transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 52px;
         }
-        .btn-cancel:hover { color: var(--text); background: var(--glass); transform: translateY(-1px); }
+        .btn-cancel:active { transform: scale(0.98); }
         .btn-confirm {
-            flex: 2; padding: 14px; border-radius: 16px;
+            flex: 2; padding: 16px; border-radius: 16px;
             background: var(--accent); border: none;
             font-family: inherit; font-size: 14px; font-weight: 800;
             color: #fff; cursor: pointer;
             box-shadow: 0 4px 16px rgba(var(--accent-rgb),0.4); transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 52px;
         }
-        .btn-confirm:hover { transform: translateY(-2px); box-shadow: 0 6px 24px rgba(var(--accent-rgb),0.5); }
+        .btn-confirm:active { transform: scale(0.98); }
         .btn-confirm:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
         .modal-icon-box {
             width: 56px; height: 56px; border-radius: 18px;
@@ -757,24 +780,32 @@
         .modal-alert-title { text-align: center; font-size: 17px; font-weight: 800; letter-spacing: -0.02em; color: var(--text); margin-bottom: 8px; }
         .modal-alert-desc { text-align: center; font-size: 12px; font-weight: 500; color: var(--text2); line-height: 1.6; margin-bottom: 20px; }
         .btn-red {
-            flex: 1.5; padding: 13px; border-radius: 14px;
+            flex: 1.5; padding: 15px; border-radius: 14px;
             background: var(--red); border: none;
             font-family: inherit; font-size: 13px; font-weight: 800; color: #fff;
             cursor: pointer; box-shadow: 0 4px 14px rgba(255,59,48,0.3); transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 50px;
         }
-        .btn-red:hover { transform: scale(1.02); }
+        .btn-red:active { transform: scale(0.98); }
         .btn-green {
-            width: 100%; padding: 13px; border-radius: 14px;
+            width: 100%; padding: 15px; border-radius: 14px;
             background: var(--green); border: none;
             font-family: inherit; font-size: 13px; font-weight: 800; color: #fff;
             cursor: pointer; box-shadow: 0 4px 14px rgba(52,199,89,0.3); transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 50px;
         }
+        .btn-green:active { transform: scale(0.98); }
         .btn-red-outline {
-            width: 100%; padding: 13px; border-radius: 14px;
+            width: 100%; padding: 15px; border-radius: 14px;
             background: rgba(255,59,48,0.12); border: none;
             font-family: inherit; font-size: 13px; font-weight: 800;
             color: var(--red); cursor: pointer; transition: all 0.2s;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 50px;
         }
+        .btn-red-outline:active { transform: scale(0.98); }
         .optional-hint { font-size: 10px; font-weight: 500; color: var(--text3); margin-left: 4px; font-style: italic; }
 
         /* ── IMPORT ─────────────────────────── */
@@ -782,6 +813,7 @@
             margin: 12px 0 0; max-height: 220px; overflow-y: auto;
             border-radius: 14px; border: 1px solid var(--glass-border);
             background: var(--glass-deep);
+            -webkit-overflow-scrolling: touch;
         }
         .import-preview::-webkit-scrollbar { width: 0; }
         .import-preview table { font-size: 11px; }
@@ -798,14 +830,17 @@
 
         .import-mode-row { display: flex; gap: 8px; margin-bottom: 16px; }
         .mode-btn {
-            flex: 1; padding: 10px 8px; border-radius: 12px;
+            flex: 1; padding: 12px 8px; border-radius: 12px;
             border: 1.5px solid var(--glass-border); background: var(--glass-deep);
             font-family: inherit; font-size: 11px; font-weight: 700;
             color: var(--text2); cursor: pointer; transition: all 0.2s; text-align: center; line-height: 1.3;
+            -webkit-tap-highlight-color: transparent;
+            min-height: 56px;
         }
         .mode-btn.active { border-color: rgba(var(--accent-rgb),0.6); background: rgba(var(--accent-rgb),0.1); color: var(--accent); }
-        .mode-btn:hover:not(.active) { background: var(--glass); }
+        .mode-btn:active { transform: scale(0.98); }
 
+        /* ── MOBILE SPECIFIC ────────────────── */
         @media (max-width: 600px) {
             header { padding: 14px 14px 0; }
             main { padding: 10px 14px 0; }
@@ -814,12 +849,63 @@
             input[type="text"] { width: 120px; font-size: 12px; }
             input[type="text"]:focus { width: 140px; }
             #cardsGrid { grid-template-columns: 1fr; }
-            .modal-card { padding: 24px 20px; border-radius: 24px; }
+            .modal-card { 
+                padding: 24px 20px; 
+                border-radius: 24px;
+                max-width: calc(100vw - 24px);
+            }
             .modal-title { font-size: 19px; }
-            .form-row { grid-template-columns: 1fr; gap: 0; }
+            .form-row { 
+                grid-template-columns: 1fr; 
+                gap: 12px;
+            }
+            .form-input {
+                font-size: 16px; /* Prevents iOS zoom on focus */
+                padding: 16px;
+            }
             .dots-grid { gap: 6px; padding: 12px; }
             .settings-panel { max-width: 100%; }
+            .card-act-btn { width: 36px; height: 36px; }
+            .icon-btn, .add-btn { min-height: 44px; } /* iOS touch target */
+            .tbl-act-btn { width: 40px; height: 40px; }
+            .dot { min-width: 44px; min-height: 44px; } /* Better touch targets */
+            
+            /* Improved form spacing on mobile */
+            .form-group { margin-bottom: 18px; }
+            .form-label { margin-bottom: 10px; font-size: 12px; }
+            .form-actions { 
+                gap: 10px;
+                flex-direction: column;
+            }
+            .btn-cancel, .btn-confirm {
+                width: 100%;
+                flex: none;
+            }
         }
+
+        /* ── LANDSCAPE MOBILE ───────────────── */
+        @media (max-height: 500px) and (orientation: landscape) {
+            .modal-card {
+                padding: 20px 16px;
+                max-height: calc(100dvh - 20px);
+            }
+            .modal-title { font-size: 17px; margin-bottom: 16px; }
+            .form-group { margin-bottom: 12px; }
+            .form-input { padding: 12px 16px; min-height: 44px; }
+            .form-actions { margin-top: 16px; padding-top: 16px; }
+            .btn-cancel, .btn-confirm { padding: 12px; min-height: 44px; }
+        }
+
+        /* ── PREVENT ZOOM ON INPUT FOCUS (iOS) ── */
+        @supports (-webkit-touch-callout: none) {
+            input[type="text"],
+            input[type="date"],
+            .form-input {
+                font-size: 16px !important;
+            }
+        }
+        .settings-item[onclick] { cursor: pointer; }
+.settings-item[onclick]:hover { background: var(--glass); }
     </style>
 </head>
 <body>
@@ -892,10 +978,8 @@
             <div id="emptyState">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                 <p>Chưa có thành viên nào được thêm vào danh sách</p>
-
-
                 <p>Vui lòng nhấn vào nút "Thêm" để thêm thành viên mới.</p>
-                <p >Hoặc kết nối mạng chưa ổn định</p>
+                <p>Hoặc kết nối mạng chưa ổn định</p>
             </div>
             <div id="cardsGrid"></div>
         </div>
@@ -918,10 +1002,13 @@
     </main>
 
     <!-- FOOTER -->
-    <footer>
-        <span class="footer-text">Crafted by</span>
-        <span class="footer-name">Hphuclam</span>
-        <div class="footer-dot"></div>
+    <footer class="page-footer">
+        <div class="footer-badge">
+            <span>Phát triển bởi</span>
+            <span>Hphuclam</span>
+            <div class="footer-dot"></div>
+            <span>Phiên bản 3.2 </span>
+        </div>
     </footer>
 
     <!-- SETTINGS PANEL -->
@@ -987,10 +1074,16 @@
                     </div>
                 </div>
                 <div class="settings-section">
+                    <div class="section-title">Hướng dẫn sử dụng</div>
+                    <div class="settings-item" style="cursor:pointer;" onclick="window.open('how-to-use.html')">
+    <div class="item-label">Hướng dẫn sử dụng các tính năng và chức năng</div>
+</div>
+                </div>
+                <div class="settings-section">
                     <div class="section-title">Thông tin</div>
                     <div class="settings-item">
                         <div class="item-label">Hệ thống tích điểm Song Anh Kids Coffee</div>
-                        <div class="item-desc" style="margin-top:4px;">Phiên bản 3.2 • Firebase Realtime Sync • Phát triển bởi Hphuclam</div>
+                        <div class="item-desc" style="margin-top:4px;">Phiên bản 3.2 Mobile • Firebase Realtime Sync • Phát triển bởi Hphuclam</div>
                     </div>
                 </div>
             </div>
@@ -1378,24 +1471,19 @@
         const phone   = document.getElementById('phone').value.trim();
         const dobVal  = document.getElementById('dob').value;
 
-        // ── Nếu không có tên bé → dùng SĐT làm tên ──────────────
         const effectiveKidName = kidName || phone;
-
         let hasError = false;
 
-        // Phải có ít nhất 1 thông tin nào đó
         const hasAnyData = kidName || dadName || momName || phone || dobVal;
         if (!hasAnyData) {
             showFieldError('kidName', 'Vui lòng nhập ít nhất 1 thông tin của bé');
             hasError = true;
         } else {
-            // Validate tên nếu có nhập
             if (kidName && kidName.length < 2) {
                 showFieldError('kidName', 'Họ tên quá ngắn, ít nhất 2 ký tự');
                 hasError = true;
             }
 
-            // Validate SĐT nếu có nhập
             if (phone) {
                 if (phone.length !== 10) {
                     showFieldError('phone', `Cần đúng 10 số — bạn đang nhập ${phone.length} số`);
@@ -1406,7 +1494,6 @@
                 }
             }
 
-            // Validate ngày sinh nếu có nhập
             if (dobVal) {
                 const dob = new Date(dobVal);
                 if (dob > today) {
@@ -1418,7 +1505,6 @@
 
         if (hasError) return;
 
-        // Giữ điểm cũ khi edit
         let currentPoints = 0;
         if (editId) {
             const ex = members.find(m => m.id == editId);
@@ -1427,13 +1513,12 @@
 
         const newData = {
             id: editId ? String(editId) : String(Date.now()),
-            kidName: effectiveKidName,   // ← dùng SĐT nếu không có tên
+            kidName: effectiveKidName,
             dadName, momName, phone,
             dob: dobVal, points: currentPoints,
             updatedAt: new Date().toISOString()
         };
 
-        // Kiểm tra miễn phí vé (chỉ khi thêm mới và có ngày sinh)
         if (!editId && dobVal) {
             const b = new Date(dobVal);
             let ageMonths = (today.getFullYear() - b.getFullYear()) * 12 + (today.getMonth() - b.getMonth());
@@ -1666,7 +1751,6 @@
                 const colDob   = findCol('ngày sinh', 'ngay sinh', 'dob', 'birth');
                 const colPts   = findCol('điểm', 'diem', 'points', 'tích lũy');
 
-                // Chỉ cần có cột SĐT là đủ (tên có thể để trống → dùng SĐT)
                 if (colPhone === -1) {
                     showNotification('error', '❌ Sai định dạng', 'File thiếu cột "Số điện thoại". Đây là cột bắt buộc.');
                     resetImportFile(); return;
@@ -1677,8 +1761,6 @@
                     const dadName    = colDad >= 0 ? String(row[colDad] || '').trim() : '';
                     const momName    = colMom >= 0 ? String(row[colMom] || '').trim() : '';
                     const phone      = String(row[colPhone] || '').replace(/\D/g,'');
-
-                    // ── Nếu không có tên → dùng SĐT làm tên ──────────
                     const kidName = kidNameRaw || phone;
 
                     let dob = '';
@@ -1697,11 +1779,8 @@
                     const points = Math.min(10, Math.max(0, parseInt(colPts >= 0 ? row[colPts] : 0) || 0));
 
                     const errors = [];
-                    // Lỗi: không có cả tên lẫn SĐT
                     if (!kidName || kidName.length < 2) errors.push('Thiếu tên bé và SĐT');
-                    // Lỗi: SĐT không hợp lệ (nếu có nhập)
                     if (phone && (phone.length !== 10 || !phone.startsWith('0'))) errors.push('SĐT không hợp lệ');
-                    // Lỗi: ngày sinh trong tương lai
                     if (dob && new Date(dob) > today) errors.push('Ngày sinh tương lai');
 
                     const id = String(Date.now() + idx * 7 + Math.floor(Math.random() * 100));

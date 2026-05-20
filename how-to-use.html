@@ -1,0 +1,1388 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#5856d6">
+    <title>Hướng dẫn sử dụng · Song Anh Kids Coffee</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #f2f2f7;
+            --bg2: #ffffff;
+            --glass: rgba(255,255,255,0.70);
+            --glass-border: rgba(255,255,255,0.90);
+            --glass-deep: rgba(255,255,255,0.38);
+            --glass-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 1.5px 4px rgba(0,0,0,0.04);
+            --text: #1c1c1e;
+            --text2: #6e6e73;
+            --text3: #aeaeb2;
+            --accent: #5856d6;
+            --accent2: #af52de;
+            --accent-rgb: 88,86,214;
+            --red: #ff3b30;
+            --green: #34c759;
+            --amber: #ff9f0a;
+            --blue: #007aff;
+            --blur: blur(28px) saturate(1.8);
+            --radius: 20px;
+            --radius-pill: 999px;
+        }
+
+        html.dark {
+            --bg: #000000;
+            --bg2: #1c1c1e;
+            --glass: rgba(28,28,30,0.78);
+            --glass-border: rgba(255,255,255,0.10);
+            --glass-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            --glass-deep: rgba(255,255,255,0.05);
+            --text: #f2f2f7;
+            --text2: #aeaeb2;
+            --text3: #636366;
+            --accent: #7d7aff;
+            --accent2: #da8fff;
+            --accent-rgb: 125,122,255;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes pulseDot {
+            0%,100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.7); }
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        @keyframes accordionOpen {
+            from { opacity: 0; transform: translateY(-6px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            font-family: "Kanit", -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            -webkit-font-smoothing: antialiased;
+            transition: background 0.4s, color 0.4s;
+        }
+
+        body::before {
+            content: '';
+            position: fixed; inset: 0;
+            background:
+                radial-gradient(ellipse 70% 50% at 15% 5%, rgba(88,86,214,0.14) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 50% at 85% 90%, rgba(175,82,222,0.12) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 50% 50%, rgba(0,122,255,0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        html.dark body::before {
+            background:
+                radial-gradient(ellipse 70% 50% at 20% 10%, rgba(125,122,255,0.2) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 50% at 80% 80%, rgba(218,143,255,0.15) 0%, transparent 60%);
+        }
+
+        .page-wrap {
+            position: relative; z-index: 1;
+            max-width: 860px; margin: 0 auto;
+            padding: 0 20px 80px;
+        }
+
+        /* ── HEADER ─── */
+        .site-header {
+            padding: 28px 0 0;
+            animation: slideDown 0.5s cubic-bezier(0.22,1,0.36,1) both;
+        }
+        .header-inner {
+            display: flex; align-items: center; justify-content: space-between; gap: 12px;
+            margin-bottom: 28px;
+        }
+        .brand { display: flex; align-items: center; gap: 12px; }
+        .brand-icon {
+            width: 44px; height: 44px; border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 4px 16px rgba(var(--accent-rgb),0.35);
+            flex-shrink: 0;
+        }
+        .brand-icon svg { width: 22px; height: 22px; color: #fff; }
+        .brand-text h1 {
+            font-size: 17px; font-weight: 800;
+            letter-spacing: -0.03em; color: var(--text); line-height: 1.1;
+        }
+        .brand-text p {
+            font-size: 10px; font-weight: 600; letter-spacing: 0.16em;
+            text-transform: uppercase; color: var(--accent); margin-top: 2px;
+        }
+        .header-right { display: flex; align-items: center; gap: 8px; }
+        .back-btn {
+            display: flex; align-items: center; gap: 6px;
+            padding: 8px 16px; border-radius: var(--radius-pill);
+            background: var(--glass-deep); border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            font-family: inherit; font-size: 12px; font-weight: 700;
+            color: var(--text2); cursor: pointer; text-decoration: none;
+            transition: all 0.2s;
+        }
+        .back-btn:hover { background: var(--glass); color: var(--accent); }
+        .back-btn svg { width: 13px; height: 13px; }
+
+        .theme-btn {
+            width: 38px; height: 38px; border-radius: var(--radius-pill);
+            background: var(--glass-deep); border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: var(--text2); transition: all 0.2s;
+        }
+        .theme-btn:hover { color: var(--accent); }
+        .theme-btn svg { width: 16px; height: 16px; }
+
+        /* ── HERO ─── */
+        .hero {
+            text-align: center; padding: 40px 20px 48px;
+            animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 6px 14px; border-radius: var(--radius-pill);
+            background: rgba(var(--accent-rgb),0.1);
+            border: 1px solid rgba(var(--accent-rgb),0.22);
+            font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+            text-transform: uppercase; color: var(--accent);
+            margin-bottom: 20px;
+        }
+        .hero-badge-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: var(--accent);
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+        .hero h2 {
+            font-size: clamp(28px, 5vw, 44px);
+            font-weight: 900; letter-spacing: -0.04em;
+            line-height: 1.1; color: var(--text); margin-bottom: 14px;
+        }
+        .hero h2 span {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 15px; font-weight: 400; color: var(--text2);
+            line-height: 1.7; max-width: 560px; margin: 0 auto 32px;
+        }
+
+        /* ── QUICK STATS ─── */
+        .stats-row {
+            display: flex; gap: 10px; justify-content: center;
+            flex-wrap: wrap; margin-top: 8px;
+        }
+        .stat-pill {
+            display: flex; align-items: center; gap: 8px;
+            padding: 10px 16px; border-radius: var(--radius-pill);
+            background: var(--glass); border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            box-shadow: var(--glass-shadow);
+        }
+        .stat-pill-icon { font-size: 18px; }
+        .stat-pill-text { font-size: 12px; font-weight: 700; color: var(--text2); }
+
+        /* ── SEARCH ─── */
+        .search-section {
+            margin-bottom: 32px;
+            animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.2s both;
+        }
+        .search-box {
+            position: relative;
+        }
+        .search-box svg {
+            position: absolute; left: 16px; top: 50%;
+            transform: translateY(-50%);
+            width: 16px; height: 16px; color: var(--text3);
+            pointer-events: none;
+        }
+        .search-input {
+            width: 100%; padding: 14px 18px 14px 44px;
+            border-radius: var(--radius-pill);
+            background: var(--glass); border: 1.5px solid var(--glass-border);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            box-shadow: var(--glass-shadow);
+            font-family: inherit; font-size: 14px; font-weight: 500;
+            color: var(--text); outline: none; transition: all 0.25s;
+        }
+        .search-input::placeholder { color: var(--text3); }
+        .search-input:focus {
+            border-color: rgba(var(--accent-rgb),0.5);
+            box-shadow: 0 0 0 4px rgba(var(--accent-rgb),0.1), var(--glass-shadow);
+        }
+
+        /* ── TOC ─── */
+        .toc-card {
+            background: var(--glass); border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            box-shadow: var(--glass-shadow); border-radius: var(--radius);
+            padding: 24px; margin-bottom: 32px;
+            animation: fadeUp 0.6s cubic-bezier(0.22,1,0.36,1) 0.25s both;
+        }
+        .toc-title {
+            font-size: 11px; font-weight: 700; letter-spacing: 0.14em;
+            text-transform: uppercase; color: var(--text3); margin-bottom: 16px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .toc-title::after {
+            content: ''; flex: 1; height: 1px;
+            background: var(--glass-border);
+        }
+        .toc-grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 8px;
+        }
+        .toc-item {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; border-radius: 12px;
+            background: var(--glass-deep); border: 1px solid var(--glass-border);
+            cursor: pointer; text-decoration: none;
+            transition: all 0.2s;
+        }
+        .toc-item:hover { background: rgba(var(--accent-rgb),0.08); border-color: rgba(var(--accent-rgb),0.25); }
+        .toc-num {
+            width: 22px; height: 22px; border-radius: 7px;
+            background: rgba(var(--accent-rgb),0.12);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 10px; font-weight: 900; color: var(--accent);
+            flex-shrink: 0;
+        }
+        .toc-label { font-size: 12px; font-weight: 700; color: var(--text2); line-height: 1.3; }
+
+        /* ── SECTION ─── */
+        .guide-section {
+            margin-bottom: 36px;
+            animation: fadeUp 0.55s cubic-bezier(0.22,1,0.36,1) both;
+        }
+
+        .section-header {
+            display: flex; align-items: center; gap: 14px; margin-bottom: 16px;
+        }
+        .section-icon {
+            width: 46px; height: 46px; border-radius: 15px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+        }
+        .section-icon svg { width: 22px; height: 22px; }
+        .section-icon.purple { background: linear-gradient(135deg, rgba(var(--accent-rgb),0.18), rgba(var(--accent-rgb),0.08)); color: var(--accent); }
+        .section-icon.green { background: linear-gradient(135deg, rgba(52,199,89,0.18), rgba(52,199,89,0.08)); color: var(--green); }
+        .section-icon.amber { background: linear-gradient(135deg, rgba(255,159,10,0.18), rgba(255,159,10,0.08)); color: var(--amber); }
+        .section-icon.red { background: linear-gradient(135deg, rgba(255,59,48,0.18), rgba(255,59,48,0.08)); color: var(--red); }
+        .section-icon.blue { background: linear-gradient(135deg, rgba(0,122,255,0.18), rgba(0,122,255,0.08)); color: var(--blue); }
+        .section-icon.pink { background: linear-gradient(135deg, rgba(175,82,222,0.18), rgba(175,82,222,0.08)); color: var(--accent2); }
+
+        .section-meta { flex: 1; }
+        .section-name {
+            font-size: 18px; font-weight: 800; letter-spacing: -0.03em;
+            color: var(--text); line-height: 1.1; margin-bottom: 4px;
+        }
+        .section-desc { font-size: 11px; font-weight: 500; color: var(--text3); letter-spacing: 0.04em; }
+        .section-count {
+            font-size: 10px; font-weight: 800; letter-spacing: 0.08em;
+            padding: 4px 10px; border-radius: var(--radius-pill);
+            background: rgba(var(--accent-rgb),0.1); color: var(--accent);
+        }
+
+        /* ── FAQ ACCORDION ─── */
+        .faq-list { display: flex; flex-direction: column; gap: 10px; }
+
+        .faq-item {
+            background: var(--glass); border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            box-shadow: var(--glass-shadow);
+            border-radius: var(--radius); overflow: hidden;
+            transition: border-color 0.25s, box-shadow 0.25s;
+        }
+        .faq-item.open {
+            border-color: rgba(var(--accent-rgb),0.3);
+            box-shadow: 0 8px 32px rgba(var(--accent-rgb),0.1), var(--glass-shadow);
+        }
+        .faq-item::before {
+            content: ''; display: block; height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+        }
+
+        .faq-q {
+            width: 100%; padding: 18px 20px;
+            display: flex; align-items: center; gap: 14px;
+            background: none; border: none; cursor: pointer;
+            text-align: left; font-family: inherit;
+            transition: background 0.2s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .faq-q:hover { background: rgba(var(--accent-rgb),0.04); }
+        .faq-q-icon {
+            width: 32px; height: 32px; border-radius: 10px;
+            background: var(--glass-deep); border: 1px solid var(--glass-border);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px; flex-shrink: 0;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .faq-item.open .faq-q-icon {
+            background: rgba(var(--accent-rgb),0.12);
+            transform: scale(1.05);
+        }
+        .faq-q-text {
+            flex: 1; font-size: 14px; font-weight: 700;
+            color: var(--text); letter-spacing: -0.01em;
+        }
+        .faq-chevron {
+            width: 20px; height: 20px; color: var(--text3);
+            transition: transform 0.3s cubic-bezier(0.34,1.2,0.64,1), color 0.2s;
+            flex-shrink: 0;
+        }
+        .faq-item.open .faq-chevron {
+            transform: rotate(180deg);
+            color: var(--accent);
+        }
+
+        .faq-a {
+            max-height: 0; overflow: hidden;
+            transition: max-height 0.4s cubic-bezier(0.4,0,0.2,1);
+        }
+        .faq-item.open .faq-a { max-height: 1000px; }
+
+        .faq-a-inner {
+            padding: 0 20px 20px;
+            border-top: 1px solid var(--glass-border);
+            animation: accordionOpen 0.3s ease both;
+        }
+        .faq-a-inner p {
+            font-size: 13px; font-weight: 400; color: var(--text2);
+            line-height: 1.8; margin-top: 14px;
+        }
+        .faq-a-inner p + p { margin-top: 10px; }
+
+        /* ── CALLOUT BOXES ─── */
+        .callout {
+            display: flex; gap: 12px; padding: 14px 16px; border-radius: 14px;
+            margin-top: 14px; font-size: 12px; font-weight: 500;
+            line-height: 1.6;
+        }
+        .callout-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+        .callout.tip { background: rgba(52,199,89,0.1); border: 1px solid rgba(52,199,89,0.2); color: var(--green); }
+        .callout.warn { background: rgba(255,159,10,0.1); border: 1px solid rgba(255,159,10,0.2); color: var(--amber); }
+        .callout.info { background: rgba(var(--accent-rgb),0.08); border: 1px solid rgba(var(--accent-rgb),0.2); color: var(--accent); }
+        .callout.danger { background: rgba(255,59,48,0.08); border: 1px solid rgba(255,59,48,0.2); color: var(--red); }
+        .callout-text { color: var(--text2); font-weight: 600; }
+        .callout-text strong { font-weight: 800; }
+
+        /* ── STEPS ─── */
+        .steps { margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+        .step {
+            display: flex; gap: 12px; align-items: flex-start;
+            padding: 12px 14px; border-radius: 12px;
+            background: var(--glass-deep); border: 1px solid var(--glass-border);
+        }
+        .step-num {
+            width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0;
+            background: var(--accent); color: #fff;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 11px; font-weight: 900; margin-top: 1px;
+        }
+        .step-text { font-size: 13px; font-weight: 500; color: var(--text2); line-height: 1.6; }
+        .step-text strong { font-weight: 800; color: var(--text); }
+
+        /* ── BADGE INLINE ─── */
+        .tag {
+            display: inline-flex; align-items: center;
+            padding: 2px 8px; border-radius: var(--radius-pill);
+            font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
+        }
+        .tag.purple { background: rgba(var(--accent-rgb),0.12); color: var(--accent); }
+        .tag.green { background: rgba(52,199,89,0.12); color: var(--green); }
+        .tag.amber { background: rgba(255,159,10,0.12); color: var(--amber); }
+        .tag.red { background: rgba(255,59,48,0.1); color: var(--red); }
+
+        /* ── HIGHLIGHT ROW ─── */
+        .hl-row {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 8px; margin-top: 14px;
+        }
+        .hl-cell {
+            padding: 14px; border-radius: 14px; text-align: center;
+            background: var(--glass-deep); border: 1px solid var(--glass-border);
+        }
+        .hl-cell .hl-val { font-size: 26px; font-weight: 900; letter-spacing: -0.04em; color: var(--text); }
+        .hl-cell .hl-lbl { font-size: 10px; font-weight: 600; color: var(--text3); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+        /* ── NO RESULTS ─── */
+        #noResults {
+            display: none; flex-direction: column;
+            align-items: center; justify-content: center;
+            padding: 60px 20px; gap: 12px; color: var(--text3);
+            text-align: center;
+        }
+        #noResults svg { width: 44px; height: 44px; opacity: 0.35; }
+        #noResults p { font-size: 14px; font-weight: 600; }
+
+        /* ── FOOTER ─── */
+        .page-footer {
+            text-align: center; padding: 32px 0;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+        .footer-badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 8px 16px; border-radius: var(--radius-pill);
+            background: var(--glass); border: 1px solid var(--glass-border);
+            backdrop-filter: var(--blur); -webkit-backdrop-filter: var(--blur);
+            font-size: 11px; font-weight: 700; color: var(--text3);
+        }
+        .footer-badge span { color: var(--accent); font-weight: 800; }
+        .footer-dot {
+            width: 5px; height: 5px; border-radius: 50%;
+            background: var(--accent);
+            animation: pulseDot 2s ease-in-out infinite;
+        }
+
+        /* ── MOBILE ─── */
+        @media (max-width: 600px) {
+            .page-wrap { padding: 0 14px 60px; }
+            .hero { padding: 24px 10px 36px; }
+            .hero h2 { font-size: 26px; }
+            .toc-grid { grid-template-columns: 1fr 1fr; }
+            .hl-row { grid-template-columns: repeat(2, 1fr); }
+            .faq-q-text { font-size: 13px; }
+            .stats-row { gap: 6px; }
+            .stat-pill { padding: 8px 12px; }
+            .stat-pill-text { font-size: 11px; }
+        }
+
+        /* hidden until search */
+        .guide-section[data-hidden="true"] { display: none; }
+        .faq-item[data-hidden="true"] { display: none; }
+    </style>
+</head>
+<body>
+<div class="page-wrap">
+
+    <!-- HEADER -->
+    <header class="site-header">
+        <div class="header-inner">
+            <div class="brand">
+                <div class="brand-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="brand-text">
+                    <h1>Song Anh Kids Coffee</h1>
+                    <p>Hướng dẫn sử dụng</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="index.html" class="back-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m15 18-6-6 6-6"/></svg>
+                    Quay lại app
+                </a>
+                <button class="theme-btn" onclick="toggleTheme()" title="Đổi giao diện">
+                    <svg id="themeIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+                        <circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <div class="hero">
+        <div class="hero-badge">
+            <div class="hero-badge-dot"></div>
+            Tài liệu hướng dẫn
+        </div>
+        <h2>Mọi thứ bạn cần<br><span>biết để sử dụng</span></h2>
+        <p>Hướng dẫn đầy đủ về hệ thống tích điểm thành viên, quản lý dữ liệu, và các tính năng nâng cao.</p>
+        <div class="stats-row">
+            <div class="stat-pill">
+                <span class="stat-pill-icon">📋</span>
+                <span class="stat-pill-text">6 chủ đề</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-pill-icon">❓</span>
+                <span class="stat-pill-text">25+ câu hỏi</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-pill-icon">🔥</span>
+                <span class="stat-pill-text">Firebase Realtime</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-section">
+        <div class="search-box">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input class="search-input" type="text" id="guideSearch" placeholder="Tìm kiếm câu hỏi, tính năng…" oninput="handleSearch(this.value)">
+        </div>
+    </div>
+
+    <!-- TOC -->
+    <div class="toc-card" id="tocCard">
+        <div class="toc-title">Mục lục</div>
+        <div class="toc-grid">
+            <a class="toc-item" href="#sec-overview" onclick="scrollTo('sec-overview')">
+                <div class="toc-num">1</div>
+                <div class="toc-label">Tổng quan hệ thống</div>
+            </a>
+            <a class="toc-item" href="#sec-members" onclick="scrollTo('sec-members')">
+                <div class="toc-num">2</div>
+                <div class="toc-label">Quản lý thành viên</div>
+            </a>
+            <a class="toc-item" href="#sec-points" onclick="scrollTo('sec-points')">
+                <div class="toc-num">3</div>
+                <div class="toc-label">Tích điểm & Đổi thưởng</div>
+            </a>
+            <a class="toc-item" href="#sec-data" onclick="scrollTo('sec-data')">
+                <div class="toc-num">4</div>
+                <div class="toc-label">Xuất / Nhập dữ liệu</div>
+            </a>
+            <a class="toc-item" href="#sec-firebase" onclick="scrollTo('sec-firebase')">
+                <div class="toc-num">5</div>
+                <div class="toc-label">Kết nối Firebase</div>
+            </a>
+            <a class="toc-item" href="#sec-ui" onclick="scrollTo('sec-ui')">
+                <div class="toc-num">6</div>
+                <div class="toc-label">Giao diện & Tùy chỉnh</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- NO RESULTS -->
+    <div id="noResults">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><path d="m8 8 6 6M14 8l-6 6"/></svg>
+        <p>Không tìm thấy kết quả phù hợp</p>
+    </div>
+
+    <!-- ──────────────────────────────────────── -->
+    <!-- SECTION 1: TỔNG QUAN -->
+    <!-- ──────────────────────────────────────── -->
+    <div class="guide-section" id="sec-overview" style="animation-delay:0.3s">
+        <div class="section-header">
+            <div class="section-icon purple">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+            </div>
+            <div class="section-meta">
+                <div class="section-name">Tổng quan hệ thống</div>
+                <div class="section-desc">Giới thiệu và cách thức hoạt động</div>
+            </div>
+            <span class="section-count">4 câu hỏi</span>
+        </div>
+        <div class="faq-list">
+
+            <div class="faq-item" data-search="hệ thống tích điểm là gì song anh kids coffee hoạt động">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🏡</div>
+                    <div class="faq-q-text">Hệ thống tích điểm này là gì và hoạt động như thế nào?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Đây là ứng dụng quản lý thẻ tích điểm dành cho khách hàng nhỏ tuổi tại <strong>Khu vui chơi Song Anh Kids Coffee</strong>. Hệ thống cho phép theo dõi điểm tích lũy của từng bé theo thời gian thực.</p>
+                        <p>Mỗi thành viên có một thẻ với <strong>10 ô tích điểm</strong>. Khi bé đến chơi, nhân viên bấm +1 điểm. Tích đủ 10 điểm, bé sẽ nhận được <strong>1 vé miễn phí</strong> vào cổng và điểm sẽ được reset về 0 để bắt đầu vòng mới.</p>
+                        <div class="hl-row">
+                            <div class="hl-cell">
+                                <div class="hl-val">10</div>
+                                <div class="hl-lbl">Điểm / Vòng</div>
+                            </div>
+                            <div class="hl-cell">
+                                <div class="hl-val">1</div>
+                                <div class="hl-lbl">Vé miễn phí</div>
+                            </div>
+                            <div class="hl-cell">
+                                <div class="hl-val">∞</div>
+                                <div class="hl-lbl">Thiết bị đồng bộ</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="dữ liệu lưu ở đâu firebase cloud đồng bộ">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">☁️</div>
+                    <div class="faq-q-text">Dữ liệu được lưu ở đâu? Có mất khi tắt app không?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Tất cả dữ liệu được lưu trực tiếp trên <strong>Firebase Firestore</strong> — dịch vụ cơ sở dữ liệu đám mây của Google. Dữ liệu không bao giờ bị mất khi đóng app, tắt máy, hay xóa cache trình duyệt.</p>
+                        <div class="callout info">
+                            <span class="callout-icon">🔄</span>
+                            <div class="callout-text"><strong>Đồng bộ thời gian thực:</strong> Khi nhân viên A tích điểm cho bé trên máy tính, nhân viên B đang xem trên điện thoại sẽ thấy cập nhật ngay lập tức mà không cần tải lại trang.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="sử dụng trên điện thoại máy tính bảng thiết bị mobile">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">📱</div>
+                    <div class="faq-q-text">Có thể dùng trên điện thoại không?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Hoàn toàn có thể! App được thiết kế <strong>mobile-first</strong> — tối ưu cho cả điện thoại iOS lẫn Android. Giao diện tự động điều chỉnh kích thước, nút bấm đủ lớn để thao tác dễ dàng bằng ngón tay.</p>
+                        <div class="callout tip">
+                            <span class="callout-icon">💡</span>
+                            <div class="callout-text"><strong>Thêm vào màn hình chính:</strong> Trên Safari (iOS), nhấn <strong>Chia sẻ → Thêm vào màn hình chính</strong> để dùng như app thực sự, không cần mở trình duyệt mỗi lần.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="ai có thể sử dụng quyền truy cập phân quyền">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">👥</div>
+                    <div class="faq-q-text">Ai có thể truy cập và sử dụng hệ thống?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Bất kỳ ai có đường link đến file HTML này đều có thể truy cập và sử dụng đầy đủ tính năng. Hiện tại hệ thống chưa có phân quyền người dùng — tất cả nhân viên dùng chung một giao diện.</p>
+                        <div class="callout warn">
+                            <span class="callout-icon">⚠️</span>
+                            <div class="callout-text"><strong>Lưu ý bảo mật:</strong> Nên chỉ chia sẻ link cho nhân viên được ủy quyền. Tránh đăng lên mạng xã hội vì ai có link cũng có thể xem và chỉnh sửa dữ liệu.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ──────────────────────────────────────── -->
+    <!-- SECTION 2: QUẢN LÝ THÀNH VIÊN -->
+    <!-- ──────────────────────────────────────── -->
+    <div class="guide-section" id="sec-members" style="animation-delay:0.35s">
+        <div class="section-header">
+            <div class="section-icon green">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><path d="M20 8v6M23 11h-6"/></svg>
+            </div>
+            <div class="section-meta">
+                <div class="section-name">Quản lý thành viên</div>
+                <div class="section-desc">Thêm, sửa, xóa và tìm kiếm</div>
+            </div>
+            <span class="section-count">6 câu hỏi</span>
+        </div>
+        <div class="faq-list">
+
+            <div class="faq-item" data-search="thêm thành viên mới bé đăng ký cách thêm">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">➕</div>
+                    <div class="faq-q-text">Làm sao để thêm thành viên mới?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Nhấn nút <span class="tag purple">+ Thêm</span> ở góc trên bên phải màn hình. Một cửa sổ nhập liệu sẽ hiện ra.</p>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-num">1</div>
+                                <div class="step-text">Nhập <strong>họ tên bé</strong> (tuỳ chọn — nếu không có, hệ thống sẽ dùng số điện thoại làm tên)</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">2</div>
+                                <div class="step-text">Nhập <strong>tên cha và tên mẹ</strong> (tuỳ chọn, giúp liên hệ khi cần)</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">3</div>
+                                <div class="step-text">Nhập <strong>số điện thoại</strong> — phải đúng 10 số, bắt đầu bằng 0</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">4</div>
+                                <div class="step-text">Chọn <strong>ngày sinh</strong> của bé (tuỳ chọn — dùng để hiển thị tuổi và cảnh báo sinh nhật)</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">5</div>
+                                <div class="step-text">Nhấn <strong>Xác nhận</strong> — thành viên được lưu ngay lên Firebase</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="sửa thông tin thành viên chỉnh sửa cập nhật">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">✏️</div>
+                    <div class="faq-q-text">Sửa thông tin thành viên bằng cách nào?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Trên mỗi thẻ thành viên, nhấn biểu tượng <strong>✏️ bút chì</strong> (nút giữa trong nhóm 3 nút góc trên phải của thẻ). Cửa sổ sửa thông tin sẽ hiện ra với dữ liệu hiện tại được điền sẵn.</p>
+                        <div class="callout info">
+                            <span class="callout-icon">ℹ️</span>
+                            <div class="callout-text">Khi sửa thông tin, <strong>điểm tích lũy hiện tại của bé sẽ được giữ nguyên</strong>. Chỉ có thể thay đổi tên, số điện thoại, tên phụ huynh và ngày sinh.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="xóa thành viên xóa bé xóa dữ liệu khỏi hệ thống">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🗑️</div>
+                    <div class="faq-q-text">Xóa thành viên có khôi phục lại được không?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Nhấn biểu tượng <strong>🗑️ thùng rác</strong> trên thẻ thành viên. Một hộp thoại xác nhận sẽ hiện ra trước khi xóa để tránh thao tác nhầm.</p>
+                        <div class="callout danger">
+                            <span class="callout-icon">❌</span>
+                            <div class="callout-text"><strong>Không thể khôi phục!</strong> Khi nhấn "Xóa ngay", dữ liệu bị xóa vĩnh viễn khỏi Firebase. Hãy xuất Excel trước nếu muốn lưu backup.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="tìm kiếm search lọc thành viên theo tên số điện thoại">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🔍</div>
+                    <div class="faq-q-text">Tìm kiếm thành viên bằng cách nào?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Sử dụng ô tìm kiếm ở góc trên bên phải (biểu tượng 🔍). Hỗ trợ tìm kiếm theo <strong>tên bé</strong> hoặc <strong>số điện thoại</strong>. Kết quả cập nhật ngay khi bạn gõ — không cần nhấn Enter.</p>
+                        <div class="callout tip">
+                            <span class="callout-icon">💡</span>
+                            <div class="callout-text">Nhấn nút <strong>✕</strong> nhỏ bên phải ô tìm kiếm để xóa nhanh và hiển thị lại toàn bộ danh sách.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="số điện thoại bắt buộc không có sdt làm sao">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">📞</div>
+                    <div class="faq-q-text">Nếu bé chưa có tên, hệ thống xử lý thế nào?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Trường "Họ tên bé" là tuỳ chọn. Nếu bỏ trống, hệ thống sẽ <strong>tự động dùng số điện thoại làm tên hiển thị</strong> trên thẻ. Điều này hữu ích khi khách hàng muốn đăng ký nhanh chỉ với SĐT.</p>
+                        <div class="callout info">
+                            <span class="callout-icon">ℹ️</span>
+                            <div class="callout-text">Dù vậy, cần nhập ít nhất <strong>1 trong 2</strong>: họ tên bé (≥ 2 ký tự) hoặc số điện thoại hợp lệ. Hệ thống sẽ báo lỗi nếu cả hai đều trống.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="tải thẻ download ảnh thẻ thành viên png">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">💾</div>
+                    <div class="faq-q-text">Tải ảnh thẻ thành viên về máy bằng cách nào?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Nhấn biểu tượng <strong>⬇️ tải xuống</strong> (nút đầu tiên, ngoài cùng bên trái trong nhóm nút trên thẻ). Hệ thống sẽ chụp ảnh thẻ và tải về máy dưới dạng file <span class="tag purple">.PNG</span>.</p>
+                        <div class="callout tip">
+                            <span class="callout-icon">💡</span>
+                            <div class="callout-text">File ảnh được tải về độ phân giải cao (2x) để in ấn sắc nét. Tên file có dạng <strong>The-Tich-Diem-[ID].png</strong>.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ──────────────────────────────────────── -->
+    <!-- SECTION 3: TÍCH ĐIỂM & ĐỔI THƯỞNG -->
+    <!-- ──────────────────────────────────────── -->
+    <div class="guide-section" id="sec-points" style="animation-delay:0.4s">
+        <div class="section-header">
+            <div class="section-icon amber">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="section-meta">
+                <div class="section-name">Tích điểm & Đổi thưởng</div>
+                <div class="section-desc">Quy trình và trường hợp đặc biệt</div>
+            </div>
+            <span class="section-count">5 câu hỏi</span>
+        </div>
+        <div class="faq-list">
+
+            <div class="faq-item" data-search="tích điểm bấm điểm cộng điểm cho bé">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">⭐</div>
+                    <div class="faq-q-text">Cách tích điểm cho bé?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Trên thẻ, nhấn vào bất kỳ <strong>ô tròn nào</strong> trong lưới 10 ô (hoặc nhấn nút <span class="tag green">⊕ Tích điểm</span> ở chế độ xem bảng). Hệ thống tự động cộng thêm 1 điểm và lưu ngay lên Firebase.</p>
+                        <div class="callout info">
+                            <span class="callout-icon">🖼️</span>
+                            <div class="callout-text">Mỗi ô đã tích hiển thị <strong>logo Song Anh</strong> bên trong. Ô chưa tích hiển thị trống. Bạn có thể thay file <strong>img/logo-removed.png</strong> để đổi ảnh hiển thị trong ô.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="đủ 10 điểm đổi vé miễn phí phần thưởng">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🎉</div>
+                    <div class="faq-q-text">Điều gì xảy ra khi bé đủ 10 điểm?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Khi bé đang có <strong>10 điểm</strong> và nhân viên bấm tích điểm thêm lần nữa, hệ thống sẽ:</p>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-num">1</div>
+                                <div class="step-text">Hiện thông báo chúc mừng <span class="tag amber">🎉 Đủ điểm!</span> kèm tên bé</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">2</div>
+                                <div class="step-text">Tự động <strong>reset điểm về 0</strong> để bắt đầu vòng tích điểm mới</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">3</div>
+                                <div class="step-text">Nhân viên <strong>trao vé miễn phí</strong> vào cổng cho bé theo quy trình cửa hàng</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="bé dưới 12 tháng trẻ sơ sinh miễn phí vé">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">👶</div>
+                    <div class="faq-q-text">Bé dưới 12 tháng tuổi thì sao?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Hệ thống có tính năng tự động phát hiện bé dưới 12 tháng tuổi khi <strong>thêm mới thành viên</strong> và có nhập ngày sinh. Nếu bé đủ điều kiện, thay vì lưu vào danh sách, hệ thống sẽ hiện thông báo:</p>
+                        <div class="callout tip">
+                            <span class="callout-icon">🎟️</span>
+                            <div class="callout-text"><strong>Miễn phí vé!</strong> — Thông báo sẽ hiện tên bé, số tháng tuổi, và xác nhận bé được miễn phí vé vào cổng hôm nay. Bé dưới 12 tháng không được thêm vào danh sách tích điểm.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="sinh nhật hôm nay birthday cảnh báo hiển thị đặc biệt">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🎂</div>
+                    <div class="faq-q-text">Thẻ sinh nhật hoạt động như thế nào?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Mỗi ngày, hệ thống tự động kiểm tra ngày sinh của tất cả thành viên. Nếu hôm nay là sinh nhật của bé (trùng ngày và tháng), thẻ của bé sẽ được <strong>đánh dấu đặc biệt</strong>:</p>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-num">✨</div>
+                                <div class="step-text">Thẻ đổi sang <strong>màu vàng ấm</strong> với hiệu ứng nhấp nháy nhẹ</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">🎂</div>
+                                <div class="step-text">Hiển thị emoji bánh sinh nhật kèm dòng chữ <strong>"Sinh nhật hôm nay!"</strong></div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">⭐</div>
+                                <div class="step-text">Các ô tích điểm đổi sang <strong>màu vàng cam</strong> để phân biệt với thẻ thường</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="bấm nhầm điểm trừ điểm sửa điểm reset">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">↩️</div>
+                    <div class="faq-q-text">Bấm nhầm điểm, có thể sửa lại không?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Hiện tại hệ thống chỉ hỗ trợ cộng điểm, chưa có nút trừ điểm trực tiếp. Tuy nhiên, có thể sửa bằng cách sau:</p>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-num">1</div>
+                                <div class="step-text">Nhấn <strong>Xuất Excel</strong> trong phần Cài đặt để backup điểm trước</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">2</div>
+                                <div class="step-text">Sửa điểm trong file Excel theo số điểm đúng</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">3</div>
+                                <div class="step-text"><strong>Nhập lại Excel</strong> với chế độ <span class="tag purple">Gộp thêm</span> — hệ thống sẽ cập nhật điểm theo file mới</div>
+                            </div>
+                        </div>
+                        <div class="callout warn">
+                            <span class="callout-icon">⚠️</span>
+                            <div class="callout-text">Khi nhập Excel chế độ <strong>Gộp thêm</strong>, thành viên đã tồn tại sẽ được ghi đè bằng dữ liệu từ file. Hãy chắc chắn file Excel có điểm số chính xác trước khi nhập.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ──────────────────────────────────────── -->
+    <!-- SECTION 4: XUẤT / NHẬP DỮ LIỆU -->
+    <!-- ──────────────────────────────────────── -->
+    <div class="guide-section" id="sec-data" style="animation-delay:0.45s">
+        <div class="section-header">
+            <div class="section-icon blue">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+            </div>
+            <div class="section-meta">
+                <div class="section-name">Xuất / Nhập dữ liệu Excel</div>
+                <div class="section-desc">Backup và di chuyển dữ liệu</div>
+            </div>
+            <span class="section-count">4 câu hỏi</span>
+        </div>
+        <div class="faq-list">
+
+            <div class="faq-item" data-search="xuất excel export tải danh sách">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">📊</div>
+                    <div class="faq-q-text">Cách xuất danh sách ra file Excel?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Vào <strong>Cài đặt</strong> (nút bánh răng góc trên phải) → mục <em>Quản lý dữ liệu</em> → nhấn <span class="tag green">Xuất Excel</span>. File sẽ tự động tải về máy.</p>
+                        <div class="callout tip">
+                            <span class="callout-icon">📋</span>
+                            <div class="callout-text">File xuất ra có đầy đủ: <strong>Họ tên bé, Tên bố/mẹ, SĐT, Ngày sinh, Tuổi, Điểm, Trạng thái, và cột Sinh nhật</strong>. Tên file có dạng <em>SongAnh-ThanhVien-YYYY-MM-DD.xlsx</em>.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="nhập excel import dữ liệu từ file cách nhập">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">📥</div>
+                    <div class="faq-q-text">Cách nhập dữ liệu từ file Excel vào hệ thống?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Vào <strong>Cài đặt</strong> → <em>Quản lý dữ liệu</em> → nhấn <span class="tag purple">Nhập Excel</span> → chọn file <span class="tag purple">.xlsx</span> hoặc <span class="tag purple">.xls</span>. Hệ thống tự đọc và hiển thị bản xem trước để kiểm tra trước khi lưu.</p>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-num">1</div>
+                                <div class="step-text">Chọn chế độ: <strong>Gộp thêm</strong> (giữ dữ liệu cũ, thêm mới) hoặc <strong>Ghi đè</strong> (xóa hết, thay bằng file mới)</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">2</div>
+                                <div class="step-text">Kiểm tra bảng xem trước — các dòng lỗi bị mờ và đánh dấu <span class="tag red">✗ Lỗi</span></div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">3</div>
+                                <div class="step-text">Nhấn <strong>Nhập dữ liệu</strong> để lưu lên Firebase</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="định dạng cột file excel nhập liệu chuẩn mẫu">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">📋</div>
+                    <div class="faq-q-text">File Excel cần có định dạng như thế nào để nhập đúng?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Hệ thống nhận diện cột linh hoạt dựa vào tên tiêu đề. Cột bắt buộc duy nhất là <strong>Số điện thoại</strong>. Các tên cột được hỗ trợ:</p>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-num">📛</div>
+                                <div class="step-text"><strong>Tên bé:</strong> "Tên bé", "Họ tên", "ten be"</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">👨</div>
+                                <div class="step-text"><strong>Tên bố:</strong> "Bố", "Bo", "Dad", "Father", "Cha"</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">👩</div>
+                                <div class="step-text"><strong>Tên mẹ:</strong> "Mẹ", "Me", "Mom", "Mother"</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">📱</div>
+                                <div class="step-text"><strong>SĐT (bắt buộc):</strong> "Điện thoại", "Phone", "SDT", "Liên hệ"</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">📅</div>
+                                <div class="step-text"><strong>Ngày sinh:</strong> "Ngày sinh", "DOB", "Birth" — định dạng DD/MM/YYYY hoặc YYYY-MM-DD</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">⭐</div>
+                                <div class="step-text"><strong>Điểm:</strong> "Điểm", "Points", "Tích lũy" — số từ 0–10</div>
+                            </div>
+                        </div>
+                        <div class="callout tip">
+                            <span class="callout-icon">💡</span>
+                            <div class="callout-text">Cách đơn giản nhất: <strong>Xuất Excel trước</strong>, chỉnh sửa file vừa xuất, rồi nhập lại. File xuất đã có đúng định dạng tất cả cột.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="gộp thêm ghi đè replace merge khác nhau khi nào dùng">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🔄</div>
+                    <div class="faq-q-text">Khác nhau giữa chế độ "Gộp thêm" và "Ghi đè"?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <div class="hl-row">
+                            <div class="hl-cell">
+                                <div class="hl-val" style="font-size:20px;color:var(--green)">Gộp</div>
+                                <div class="hl-lbl">Giữ dữ liệu cũ</div>
+                            </div>
+                            <div class="hl-cell">
+                                <div class="hl-val" style="font-size:20px;color:var(--amber)">Đè</div>
+                                <div class="hl-lbl">Xóa hết, thay mới</div>
+                            </div>
+                        </div>
+                        <p>• <strong>Gộp thêm:</strong> Giữ nguyên tất cả thành viên hiện có, chỉ thêm mới từ file. Dùng khi muốn bổ sung một số thành viên hoặc cập nhật điểm cho một vài người.</p>
+                        <p>• <strong>Ghi đè:</strong> Xóa toàn bộ dữ liệu Firebase, thay thế bằng file Excel mới. Dùng khi di chuyển sang hệ thống mới hoặc khôi phục từ backup.</p>
+                        <div class="callout danger">
+                            <span class="callout-icon">⚠️</span>
+                            <div class="callout-text"><strong>Ghi đè không thể hoàn tác!</strong> Hãy xuất backup trước khi chọn chế độ này.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ──────────────────────────────────────── -->
+    <!-- SECTION 5: KẾT NỐI FIREBASE -->
+    <!-- ──────────────────────────────────────── -->
+    <div class="guide-section" id="sec-firebase" style="animation-delay:0.5s">
+        <div class="section-header">
+            <div class="section-icon red">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="section-meta">
+                <div class="section-name">Kết nối Firebase & Sự cố</div>
+                <div class="section-desc">Xử lý lỗi và kết nối mạng</div>
+            </div>
+            <span class="section-count">4 câu hỏi</span>
+        </div>
+        <div class="faq-list">
+
+            <div class="faq-item" data-search="lỗi kết nối firebase không phản hồi timeout">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🔴</div>
+                    <div class="faq-q-text">App hiện "Firebase không phản hồi" phải làm gì?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Thông báo này xuất hiện khi app không nhận được dữ liệu từ Firebase sau 8 giây. Kiểm tra theo thứ tự:</p>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-num">1</div>
+                                <div class="step-text">Kiểm tra <strong>kết nối mạng</strong> của thiết bị — thử mở một trang web khác</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">2</div>
+                                <div class="step-text">Nhấn <strong>↺ Thử lại</strong> để reload toàn bộ ứng dụng</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">3</div>
+                                <div class="step-text">Nếu vẫn lỗi, kiểm tra <strong>Firebase Console</strong> xem Firestore đã được bật chưa và Security Rules đang cho phép đọc/ghi</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="chấm tròn màu sắc kết nối trạng thái xanh vàng đỏ">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🟢</div>
+                    <div class="faq-q-text">Các chấm màu trên header có ý nghĩa gì?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Chấm tròn nhỏ cạnh dòng "Hệ thống tích điểm" cho biết trạng thái kết nối Firebase:</p>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-num" style="background:var(--green)">●</div>
+                                <div class="step-text"><strong>Xanh lá:</strong> Đã kết nối Firebase, dữ liệu đang được đồng bộ bình thường</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num" style="background:var(--amber)">●</div>
+                                <div class="step-text"><strong>Vàng cam:</strong> Ngoại tuyến (offline) — mất kết nối mạng, thay đổi sẽ đồng bộ khi có mạng trở lại</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num" style="background:var(--red)">●</div>
+                                <div class="step-text"><strong>Đỏ:</strong> Lỗi kết nối — cần kiểm tra cấu hình Firebase hoặc mạng</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="mất mạng offline không có internet vẫn dùng được không">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">📶</div>
+                    <div class="faq-q-text">Mất mạng có dùng được app không?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Firebase Firestore có tính năng <strong>offline persistence</strong> giới hạn — tuy nhiên trong triển khai hiện tại, app hoạt động tốt nhất khi <strong>có kết nối Internet</strong>.</p>
+                        <div class="callout warn">
+                            <span class="callout-icon">⚠️</span>
+                            <div class="callout-text">Khi mất mạng, dữ liệu đã tải vẫn hiển thị nhưng các thao tác <strong>tích điểm, thêm, sửa, xóa sẽ không lưu được</strong> cho đến khi có mạng trở lại. Banner "Ngoại tuyến" sẽ xuất hiện để cảnh báo.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="thay đổi firebase cấu hình project mới projectId">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">⚙️</div>
+                    <div class="faq-q-text">Làm sao để đổi sang Firebase project khác?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Mở file HTML bằng trình soạn thảo code, tìm đến đoạn <strong>const firebaseConfig</strong> trong thẻ <code style="font-family:monospace;font-size:11px;background:var(--glass-deep);padding:2px 6px;border-radius:5px">&lt;script type="module"&gt;</code>. Thay toàn bộ giá trị bằng config từ Firebase Console của project mới.</p>
+                        <div class="callout info">
+                            <span class="callout-icon">🔑</span>
+                            <div class="callout-text">Lấy config tại: <strong>Firebase Console → Project Settings → Your apps → Firebase SDK snippet → Config</strong>. Đảm bảo đã bật Firestore Database và cấu hình Security Rules cho phép đọc/ghi.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ──────────────────────────────────────── -->
+    <!-- SECTION 6: GIAO DIỆN & TÙY CHỈNH -->
+    <!-- ──────────────────────────────────────── -->
+    <div class="guide-section" id="sec-ui" style="animation-delay:0.55s">
+        <div class="section-header">
+            <div class="section-icon pink">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"/></svg>
+            </div>
+            <div class="section-meta">
+                <div class="section-name">Giao diện & Tùy chỉnh</div>
+                <div class="section-desc">Chế độ tối, chế độ xem, phím tắt</div>
+            </div>
+            <span class="section-count">4 câu hỏi</span>
+        </div>
+        <div class="faq-list">
+
+            <div class="faq-item" data-search="chế độ tối dark mode bật tắt đổi giao diện">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🌙</div>
+                    <div class="faq-q-text">Bật chế độ tối (Dark Mode) bằng cách nào?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Vào <strong>Cài đặt</strong> (nút ⚙️ góc trên phải) → mục <em>Giao diện</em> → nhấn công tắc <strong>Chế độ tối</strong>. Giao diện chuyển đổi mượt mà ngay lập tức.</p>
+                        <div class="callout tip">
+                            <span class="callout-icon">💡</span>
+                            <div class="callout-text">Tuỳ chọn này được <strong>lưu vào bộ nhớ trình duyệt</strong> (localStorage). Lần sau mở app, giao diện sẽ tự động khôi phục theo lựa chọn trước đó.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="cards list bảng chế độ xem chuyển đổi hiển thị">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🗂️</div>
+                    <div class="faq-q-text">Khác nhau giữa chế độ "Cards" và "List"?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Dùng thanh chuyển đổi <strong>Cards / List</strong> ở giữa màn hình để đổi chế độ xem:</p>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-num">🃏</div>
+                                <div class="step-text"><strong>Cards:</strong> Mỗi bé hiện thành một thẻ riêng biệt với lưới 10 ô tích điểm trực quan. Phù hợp để tích điểm nhanh khi khách hàng đứng trước quầy.</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">📋</div>
+                                <div class="step-text"><strong>List:</strong> Hiện dạng bảng gọn hơn với thanh tiến trình điểm. Phù hợp để xem tổng quan danh sách nhiều thành viên hoặc tìm kiếm nhanh.</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="logo ảnh trong ô tích điểm thay đổi hình ảnh">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🖼️</div>
+                    <div class="faq-q-text">Thay đổi logo hiển thị trong ô tích điểm?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Mỗi ô tích điểm đã điền hiển thị file ảnh <strong>img/logo-removed.png</strong> (logo của cửa hàng đã xóa nền). Để thay đổi:</p>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-num">1</div>
+                                <div class="step-text">Chuẩn bị ảnh logo mới — nên dùng PNG <strong>nền trong suốt</strong> (transparent), kích thước vuông khoảng 200×200px</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">2</div>
+                                <div class="step-text">Đặt file vào thư mục <code style="font-family:monospace;font-size:11px;background:var(--glass-deep);padding:2px 6px;border-radius:5px">img/</code> cùng cấp với file HTML</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num">3</div>
+                                <div class="step-text">Đổi tên file thành <code style="font-family:monospace;font-size:11px;background:var(--glass-deep);padding:2px 6px;border-radius:5px">logo-removed.png</code> (hoặc sửa đường dẫn trong code HTML)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="faq-item" data-search="banner sync thông báo đồng bộ lưu xuất hiện biến mất">
+                <button class="faq-q" onclick="toggleFaq(this)">
+                    <div class="faq-q-icon">🔔</div>
+                    <div class="faq-q-text">Banner "Đang lưu..." xuất hiện rồi tự biến mất là bình thường không?</div>
+                    <svg class="faq-chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <div class="faq-a">
+                    <div class="faq-a-inner">
+                        <p>Hoàn toàn bình thường! Banner thông báo nhỏ ở đầu màn hình hiển thị trạng thái đồng bộ theo thời gian thực:</p>
+                        <div class="steps">
+                            <div class="step">
+                                <div class="step-num" style="background:var(--accent)">↻</div>
+                                <div class="step-text"><span class="tag purple">Đang lưu...</span> — đang gửi thay đổi lên Firebase (biểu tượng quay tròn)</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num" style="background:var(--green)">✓</div>
+                                <div class="step-text"><span class="tag green">Đã đồng bộ</span> — lưu thành công, banner tự ẩn sau 2 giây</div>
+                            </div>
+                            <div class="step">
+                                <div class="step-num" style="background:var(--red)">!</div>
+                                <div class="step-text"><span class="tag red">Lỗi kết nối</span> — có vấn đề với mạng hoặc Firebase, cần kiểm tra</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="page-footer">
+        <div class="footer-badge">
+            <span>Phát triển bởi</span>
+            <span>Hphuclam</span>
+            <div class="footer-dot"></div>
+            <span>Phiên bản 3.2</span>
+        </div>
+    </footer>
+
+</div>
+
+<script>
+    // ── THEME ─────────────────────────
+    let isDark = localStorage.getItem('playground_darkmode') === 'true';
+    if (isDark) {
+        document.documentElement.classList.add('dark');
+        updateThemeIcon(true);
+    }
+
+    function toggleTheme() {
+        isDark = !isDark;
+        document.documentElement.classList.toggle('dark', isDark);
+        localStorage.setItem('playground_darkmode', isDark);
+        updateThemeIcon(isDark);
+    }
+
+    function updateThemeIcon(dark) {
+        const icon = document.getElementById('themeIcon');
+        if (dark) {
+            icon.innerHTML = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>`;
+        } else {
+            icon.innerHTML = `<circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>`;
+        }
+    }
+
+    // ── ACCORDION ─────────────────────
+    function toggleFaq(btn) {
+        const item = btn.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+        // Open clicked (if was closed)
+        if (!isOpen) item.classList.add('open');
+    }
+
+    // ── SMOOTH SCROLL ─────────────────
+    function scrollTo(id) {
+        event.preventDefault();
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // ── SEARCH ────────────────────────
+    function handleSearch(val) {
+        const q = val.toLowerCase().trim();
+        const sections = document.querySelectorAll('.guide-section');
+        const toc = document.getElementById('tocCard');
+        const noResults = document.getElementById('noResults');
+
+        let totalVisible = 0;
+
+        sections.forEach(sec => {
+            const items = sec.querySelectorAll('.faq-item');
+            let visibleInSection = 0;
+
+            items.forEach(item => {
+                const searchData = item.getAttribute('data-search') || '';
+                const qText = item.querySelector('.faq-q-text')?.textContent || '';
+                const aText = item.querySelector('.faq-a-inner')?.textContent || '';
+                const match = !q || searchData.includes(q) || qText.toLowerCase().includes(q) || aText.toLowerCase().includes(q);
+                item.setAttribute('data-hidden', match ? 'false' : 'true');
+                item.style.display = match ? '' : 'none';
+                if (match) visibleInSection++;
+            });
+
+            sec.setAttribute('data-hidden', visibleInSection === 0 ? 'true' : 'false');
+            sec.style.display = visibleInSection === 0 ? 'none' : '';
+            totalVisible += visibleInSection;
+        });
+
+        toc.style.display = q ? 'none' : '';
+        noResults.style.display = (q && totalVisible === 0) ? 'flex' : 'none';
+    }
+</script>
+</body>
+</html>
